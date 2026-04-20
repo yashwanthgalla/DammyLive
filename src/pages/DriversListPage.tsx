@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getSessions, getDrivers } from '@/api/openf1'
 import { Link } from 'react-router-dom'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
-import { ShieldCheck, UserCircle2 } from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 import { Driver } from '@/types/f1'
 import { getDriverImage } from '@/lib/imageMap'
 
@@ -36,8 +36,6 @@ export default function DriversListPage() {
     if (!acc.find(d => d.driver_number === current.driver_number)) acc.push(current)
     return acc
   }, []).sort((a, b) => a.driver_number - b.driver_number)
-
-  const toDriverId = (d: Driver) => `${d.first_name}_${d.last_name}`.toLowerCase().replace(/ /g, '_')
 
   return (
     <div className="min-h-screen bg-[#F8F7F3] text-text-primary">
