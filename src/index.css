@@ -1,0 +1,1049 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * =============================================================================
+ * F1 DASHBOARD DESIGN SYSTEM
+ * Comprehensive CSS variables, tokens, and utilities for production-ready UI
+ * =============================================================================
+ */
+
+/**
+ * SECTION 1: CSS CUSTOM PROPERTIES & DESIGN TOKENS
+ * Light mode defaults, dark mode overrides below
+ */
+:root {
+  /* ===== MINIMALIST RED COLOR PALETTE ===== */
+  --bg: #fdfdfd;
+  --bg-subtle: #f2f2f5;
+  --surface: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #5a5a60;
+  --text-muted: #8d8d95;
+  --border: #e2e2e8;
+  --divider: #f0f0f5;
+  
+  /* F1 Brand Colors - Premium */
+  --f1-red: #ff1801;
+  --f1-red-glow: rgba(255, 24, 1, 0.4);
+  --f1-green: #00d2be;
+  --f1-yellow: #ffcf00;
+  
+  /* Modern Surface System */
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-hover: rgba(255, 255, 255, 0.08);
+  
+  /* Team Colors - Muted for minimalist theme */
+  --team-mercedes: #00bbb3;
+  --team-ferrari: #dc0000;
+  --team-redbull: #1e41ff;
+  --team-mclaren: #ff8700;
+  --team-alpine: #ff87bc;
+  --team-aston: #006f62;
+  --team-williams: #005aff;
+  --team-haas: #999999;
+  --team-rb: #1634cb;
+  --team-kick: #52e254;
+  
+  /* ===== SPACING SCALE ===== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  
+  /* ===== TYPOGRAPHY ===== */
+  --font-sans: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 3rem;
+  --line-height-tight: 1.3;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --letter-spacing: 0em;
+  
+  /* ===== BORDER RADIUS — Curved ===== */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  
+  /* ===== SHADOWS - Minimalist ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.1);
+  
+  /* ===== TRANSITIONS ===== */
+  --transition-base: all 0.2s ease-out;
+  --transition-colors: color, background-color, border-color 0.2s ease-out;
+  --transition-transform: transform 0.2s ease-out;
+  
+  /* ===== LEGACY VARIABLES (backwards compatibility) ===== */
+  --card: #ffffff;
+  --ring: #dc0000;
+  --input: #f5f5f5;
+  --muted: #f5f5f5;
+  --accent: #ffffff;
+  --border: #e0e0e0;
+  --radius: 0.375rem;
+  --chart-1: #dc0000;
+  --chart-2: #00bbb3;
+  --chart-3: #ff8700;
+  --chart-4: #1e41ff;
+  --chart-5: #00aa44;
+  --popover: #ffffff;
+  --primary: #dc0000;
+  --sidebar: #ffffff;
+  --spacing: 0.25rem;
+  --secondary: #f5f5f5;
+  --background: #ffffff;
+  --font-serif: 'Source Serif 4', serif;
+  --foreground: #1a1a1a;
+  --destructive: #d32f2f;
+  --shadow-blur: 4px;
+  --shadow-color: hsl(0 0% 0%);
+  --sidebar-ring: #dc0000;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.06;
+  --sidebar-accent: #f5f5f5;
+  --sidebar-border: #e0e0e0;
+  --card-foreground: #1a1a1a;
+  --shadow-offset-x: 0px;
+  --shadow-offset-y: 2px;
+  --sidebar-primary: #dc0000;
+  --muted-foreground: #666666;
+  --accent-foreground: #1a1a1a;
+  --popover-foreground: #1a1a1a;
+  --primary-foreground: #ffffff;
+  --sidebar-foreground: #1a1a1a;
+  --secondary-foreground: #666666;
+  --destructive-foreground: #ffffff;
+  --sidebar-accent-foreground: #1a1a1a;
+  --sidebar-primary-foreground: #ffffff;
+
+  color-scheme: light dark;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-primary);
+  background-color: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/**
+ * SECTION 2: THEME UNIFICATION - White & Red Professional
+ * Dark mode is disabled to ensure brand consistency
+ */
+.dark {
+  --bg: #ffffff;
+  --bg-subtle: #f2f2f5;
+  --surface: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #5a5a60;
+  --text-muted: #8d8d95;
+  --border: #e2e2e8;
+  --divider: #f0f0f5;
+  
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(0, 0, 0, 0.05);
+}
+
+/**
+ * SECTION 3: BASE ELEMENT STYLES
+ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/**
+ * SECTION 4: TYPOGRAPHY
+ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 2.25rem;
+}
+
+h2 {
+  font-size: 1.875rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+/**
+ * SECTION 5: CODE & MONOSPACE
+ */
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
+}
+
+code {
+  padding: 0.2em 0.4em;
+  background-color: hsl(var(--muted));
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+pre {
+  background-color: hsl(var(--muted));
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+pre code {
+  padding: 0;
+  background-color: transparent;
+}
+
+/**
+ * SECTION 6: LINKS
+ */
+a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+  transition: var(--transition-colors);
+}
+
+a:hover {
+  color: hsl(var(--ring));
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/**
+ * SECTION 7: FORMS
+ */
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background-color: hsl(var(--input));
+  transition: var(--transition-colors);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: var(--transition-base);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/**
+ * SECTION 8: TABLES
+ */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+th {
+  font-weight: 600;
+  background-color: hsl(var(--muted));
+  position: sticky;
+  top: 0;
+}
+
+/**
+ * SECTION 9: TEAM COLOR SYSTEM
+ * Dynamic team colors with border accent + subtle background tint
+ * Usage: <div class="team-ferrari">...</div>
+ */
+.team-mercedes {
+  --team-color: #00d2be;
+}
+
+.team-ferrari {
+  --team-color: #dc0000;
+}
+
+.team-redbull {
+  --team-color: #1e41ff;
+}
+
+.team-mclaren {
+  --team-color: #ff8700;
+}
+
+.team-alpine {
+  --team-color: #ff87bc;
+}
+
+.team-aston {
+  --team-color: #006f62;
+}
+
+.team-williams {
+  --team-color: #005aff;
+}
+
+.team-haas {
+  --team-color: #b6babd;
+}
+
+.team-rb {
+  --team-color: #1634cb;
+}
+
+.team-kick {
+  --team-color: #52e254;
+}
+
+/**
+ * SECTION 10: PREMIUM COMPONENTS
+ */
+
+/* Minimalist Card — Curved */
+.minimal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.minimal-card:hover {
+  border-color: var(--f1-red);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+}
+
+/* Driver Cutout Container */
+.driver-avatar {
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.05) 100%);
+  border-radius: var(--radius-lg);
+  aspect-ratio: 4/5;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+/* F1 Styled Table */
+.f1-table-row {
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.f1-table-row:hover {
+  background: var(--bg-subtle);
+  border-left-color: var(--f1-red);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.f1-gradient-text {
+  background: linear-gradient(135deg, var(--f1-red) 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated Button — Rounded */
+.btn-primary {
+  background: var(--f1-red);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px var(--f1-red-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px var(--f1-red-glow);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  transition: 0.5s;
+}
+
+.btn-primary:hover::after {
+  left: 100%;
+}
+
+/**
+ * Team color variant: left border accent with subtle background
+ * Usage: <div class="team-row team-ferrari">...</div>
+ */
+.team-row {
+  border-left: 3px solid var(--team-color, var(--border));
+  background-color: transparent;
+  transition: var(--transition-base);
+}
+
+.team-row:hover {
+  background-color: var(--bg-subtle);
+}
+
+/**
+ * SECTION 10: STATUS BADGES & INDICATORS
+ */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition-base);
+}
+
+/* Status variants */
+.status-completed {
+  background-color: rgba(0, 170, 68, 0.08);
+  color: #00aa44;
+  border: 1px solid #00aa44;
+  border-radius: var(--radius-full);
+}
+
+.status-live {
+  background-color: rgba(220, 0, 0, 0.08);
+  color: #dc0000;
+  border: 1px solid #dc0000;
+  border-radius: var(--radius-full);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.status-upcoming {
+  background-color: rgba(30, 65, 255, 0.08);
+  color: #1e41ff;
+  border: 1px solid #1e41ff;
+  border-radius: var(--radius-full);
+}
+
+.status-cancelled {
+  background-color: rgba(153, 153, 153, 0.08);
+  color: #666666;
+  border: 1px solid #999999;
+  border-radius: var(--radius-full);
+}
+
+/**
+ * Live indicator pulse animation - Minimalist
+ * Usage: <div class="live-pulse"></div>
+ */
+.live-pulse {
+  display: inline-block;
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #dc0000;
+}
+
+.live-pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: #dc0000;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/**
+ * SECTION 11: RESPONSIVE TABLE LAYOUT
+ * Desktop table + mobile card view pattern
+ */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.desktop-table {
+  width: 100%;
+  display: block;
+}
+
+.mobile-cards {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.mobile-card {
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--team-color, var(--border));
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) 0;
+  font-size: 0.875rem;
+}
+
+.mobile-card-row:not(:last-child) {
+  border-bottom: 1px solid hsl(var(--divider));
+}
+
+.mobile-card-label {
+  color: hsl(var(--text-secondary));
+  font-weight: 500;
+}
+
+.mobile-card-value {
+  color: hsl(var(--text-primary));
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/**
+ * Responsive breakpoints for table layouts
+ * SM: < 768px (mobile)
+ * MD: 768px - 1024px (tablet)
+ * LG: >= 1024px (desktop)
+ */
+@media (max-width: 768px) {
+  .desktop-table {
+    display: none;
+  }
+
+  .mobile-cards {
+    display: flex;
+  }
+
+  /* Stack form inputs on mobile */
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-row > * {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .desktop-table {
+    display: block;
+  }
+
+  .mobile-cards {
+    display: none;
+  }
+}
+
+/**
+ * SECTION 12: MICRO-INTERACTIONS & STATES
+ */
+
+/* Hover lift effect for cards and buttons - Minimalist */
+.hover-lift {
+  transition: var(--transition-base);
+}
+
+.hover-lift:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Navigation active state */
+.nav-active {
+  font-weight: 500;
+  border-bottom: 2px solid #dc0000;
+  color: var(--text-primary);
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 0.5rem;
+  color: var(--text-secondary);
+  transition: var(--transition-colors);
+  font-weight: 500;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #dc0000;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.2s ease-out;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.nav-link.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Loading skeleton animation */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Position change indicator (up/down/same) */
+.position-up {
+  color: #00aa44;
+  font-weight: 600;
+}
+
+.position-down {
+  color: #dc0000;
+  font-weight: 600;
+}
+
+.position-same {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Tire compound colors - Minimalist */
+.tire-soft {
+  background-color: #dc0000;
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+.tire-medium {
+  background-color: #ffcc00;
+  color: #000;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+.tire-hard {
+  background-color: #e0e0e0;
+  color: #000;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+.tire-intermediate {
+  background-color: #0099cc;
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+.tire-wet {
+  background-color: #0066ff;
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+/**
+ * SECTION 13: RESPONSIVE TYPOGRAPHY
+ */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.875rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+}
+
+/**
+ * SECTION 14: ACCESSIBILITY & MOTION PREFERENCES
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/**
+ * SECTION 15: SCROLLBAR STYLING
+ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+  transition: var(--transition-colors);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--text-secondary));
+}
+
+/**
+ * SECTION 16: UTILITY CLASSES
+ */
+
+/* Flex utilities with consistent spacing */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-md);
+}
+
+/* Text utilities */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Container utilities */
+.container-sm {
+  padding: 0 var(--space-md);
+}
+
+.container-md {
+  padding: 0 var(--space-lg);
+}
+
+.container-lg {
+  padding: 0 var(--space-xl);
+}
+
+/* Visibility utilities */
+.hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .hidden-mobile {
+    display: block;
+  }
+
+  .hidden-desktop {
+    display: none;
+  }
+}
+
+/* Spacing utilities matching design tokens */
+.gap-xs {
+  gap: var(--space-xs);
+}
+
+.gap-sm {
+  gap: var(--space-sm);
+}
+
+.gap-md {
+  gap: var(--space-md);
+}
+
+.gap-lg {
+  gap: var(--space-lg);
+}
+
+.gap-xl {
+  gap: var(--space-xl);
+}
+
+/**
+ * SECTION 17: FOLDABLE PHONE & ULTRA-SMALL DEVICE SUPPORT
+ */
+
+/* Galaxy Fold and ultra-small screens (< 360px) */
+@media (max-width: 359px) {
+  html {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 0 var(--space-sm) !important;
+  }
+
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.25rem !important;
+  }
+
+  /* Ensure cards don't overflow */
+  .minimal-card {
+    min-width: 0;
+  }
+
+  /* Stack buttons vertically on very small screens */
+  .btn-primary {
+    padding: 0.625rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Tablet-specific optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    max-width: 100%;
+    padding: 0 var(--space-lg);
+  }
+}
+
+/* Large tablet / laptop */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+/**
+ * SECTION 18: SAFE AREA INSETS (Notched devices, rounded corners)
+ */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/**
+ * SECTION 19: TOUCH OPTIMIZATIONS
+ */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger tap targets on touch devices */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Disable hover effects that feel sticky on touch */
+  .minimal-card:hover {
+    border-color: var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .minimal-card:active {
+    border-color: var(--f1-red);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Smooth scrolling for tables */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+}
+
+/**
+ * SECTION 20: LANDSCAPE PHONE OPTIMIZATION
+ */
+@media (max-height: 500px) and (orientation: landscape) {
+  header {
+    position: relative !important;
+  }
+}
+
+/**
+ * SECTION 21: PRINT STYLES
+ */
+@media print {
+  header, footer, .btn-primary, nav {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
