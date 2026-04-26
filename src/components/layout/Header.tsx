@@ -43,7 +43,7 @@ export default function Header() {
                   Dammy<em className="text-[#D4AF37] group-hover:text-[#1A1A1A] transition-colors duration-500">Live</em>
                 </span>
                 <span className="font-sans text-[8px] font-medium uppercase tracking-[0.3em] text-[#6C6863] hidden sm:block">
-                  Editorial · 2026
+                  Enhance Speed
                 </span>
               </div>
             </Link>
