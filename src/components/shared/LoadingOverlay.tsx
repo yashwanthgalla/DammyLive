@@ -1,7 +1,6 @@
 /**
- * LoadingOverlay Component
- * A premium, full-screen loading state that hides internal system activity.
- * Designed with the White & Red F1 aesthetic.
+ * LoadingOverlay Component — Luxury Editorial
+ * Full-screen, serene loading state with paper texture feel
  */
 
 import React from 'react';
@@ -13,46 +12,33 @@ interface LoadingOverlayProps {
 }
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ 
-  message = "Syncing Hub...", 
-  subMessage = "Data Transmission Active" 
+  message = "Curating...", 
+  subMessage = "Preparing Your Editorial" 
 }) => {
   return (
-    <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center animate-fade-in">
-      {/* Background Accents */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-f1-red/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-f1-red/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-      
+    <div className="fixed inset-0 z-[9999] bg-[#F9F8F6] flex flex-col items-center justify-center">
       <div className="relative flex flex-col items-center">
-        {/* Animated F1 Red Bar */}
-        <div className="w-8 h-1 bg-f1-red mb-8 animate-[width-expand_2s_infinite_ease-in-out]" />
+        {/* Decorative gold line */}
+        <div className="w-12 h-px bg-[#D4AF37] mb-12" />
         
         <LoadingSpinner />
         
-        <div className="mt-8 text-center">
-          <h2 className="text-2xl font-black text-text-primary uppercase italic tracking-tighter mb-2">
+        <div className="mt-12 text-center">
+          <h2 className="font-serif text-2xl md:text-3xl text-[#1A1A1A] leading-tight mb-3">
             {message}
           </h2>
-          <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.3em] animate-pulse">
+          <p className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
             {subMessage}
           </p>
         </div>
       </div>
       
-      {/* Bottom Technical Line */}
+      {/* Bottom label */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4">
-          <div className="text-[8px] font-black text-text-muted uppercase tracking-widest">Protocol 77</div>
-          <div className="w-8 h-px bg-border" />
-          <div className="text-[8px] font-black text-text-muted uppercase tracking-widest italic">Race Engine Active</div>
+        <span className="font-sans text-[8px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">Editorial</span>
+        <div className="w-8 h-px bg-[#1A1A1A]/10" />
+        <span className="font-serif text-[8px] italic text-[#6C6863]">Vol. 01</span>
       </div>
-
-      <style>{`
-        @keyframes width-expand {
-          0%, 100% { width: 32px; opacity: 0.5; }
-          50% { width: 128px; opacity: 1; }
-        }
-        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-      `}</style>
     </div>
   );
 };

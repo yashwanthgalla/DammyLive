@@ -1,6 +1,6 @@
 /**
  * StandingsPage - F1 Championships
- * Minimalist Red Edition — with full historical year selector (1950 → current)
+ * Luxury Editorial Edition — with full historical year selector (1950 → current)
  */
 
 import { useState } from 'react'
@@ -12,20 +12,17 @@ import {
 } from '@/api/jolpica'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
 import { User, Building2, Trophy, UserCircle2, ChevronDown, Calendar } from 'lucide-react'
-import { getDriverImage } from '@/lib/imageMap'
+import { getDriverImage, getTeamLogo } from '@/lib/imageMap'
 
-// F1 started in 1950. Constructor championship started in 1958.
 const FIRST_F1_YEAR = 1950
 const FIRST_CONSTRUCTOR_YEAR = 1958
 const CURRENT_YEAR = new Date().getFullYear()
 
-// Generate all years from current year down to 1950
 const ALL_YEARS = Array.from(
   { length: CURRENT_YEAR - FIRST_F1_YEAR + 1 },
   (_, i) => CURRENT_YEAR - i
 )
 
-// Group years by decade for the dropdown
 const DECADES = ALL_YEARS.reduce<Record<string, number[]>>((acc, year) => {
   const decade = `${Math.floor(year / 10) * 10}s`
   if (!acc[decade]) acc[decade] = []
@@ -38,14 +35,12 @@ export default function StandingsPage() {
   const [standingsType, setStandingsType] = useState<'drivers' | 'constructors'>('drivers')
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false)
 
-  // Fetch driver standings
   const driverStandingsQuery = useQuery({
     queryKey: ['driverStandings', selectedYear],
     queryFn: () => getDriverStandings(selectedYear),
     staleTime: 60 * 60 * 1000,
   })
 
-  // Fetch constructor standings
   const constructorStandingsQuery = useQuery({
     queryKey: ['constructorStandings', selectedYear],
     queryFn: () => getConstructorStandings(selectedYear),
@@ -59,37 +54,32 @@ export default function StandingsPage() {
 
   const drivers = driverStandingsQuery.data || []
   const constructors = constructorStandingsQuery.data || []
-
   const data = standingsType === 'drivers' ? drivers : constructors
 
   const getTeamColor = (id: string) => {
     const mapping: Record<string, string> = {
-      mercedes: '#27F4D2',
-      ferrari: '#E80020',
-      red_bull: '#3671C6',
-      mclaren: '#FF8000',
-      alpine: '#0093CC',
-      aston_martin: '#229971',
-      williams: '#64C4FF',
-      haas: '#B6BABD',
-      rb: '#6692FF',
-      sauber: '#52E252',
+      mercedes: '#27F4D2', ferrari: '#E80020', red_bull: '#3671C6',
+      mclaren: '#FF8000', alpine: '#0093CC', aston_martin: '#229971',
+      williams: '#64C4FF', haas: '#B6BABD', rb: '#6692FF',
+      sauber: '#52E252', audi: '#F5002C', cadillac: '#004A99',
     }
-    return mapping[id] || '#8d8d95'
+    return mapping[id] || '#6C6863'
   }
 
   return (
-    <div className="min-h-screen bg-bg">
-      <div className="container px-4 sm:px-md py-8 sm:py-12 lg:py-xl">
+    <div className="min-h-screen bg-[#F9F8F6]">
+      <div className="max-w-[1600px] mx-auto px-8 md:px-16 py-12 md:py-20 lg:py-32">
         {/* Header Section */}
-        <div className="mb-8 sm:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-8 border-b border-border pb-6 sm:pb-8">
+        <div className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#1A1A1A]/10 pb-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-f1-red/10 text-f1-red text-[10px] font-black uppercase tracking-widest mb-3 sm:mb-4 rounded-lg">
-              World Championship
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px w-8 md:w-12 bg-[#D4AF37]" />
+              <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
+                World Championship
+              </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-text-primary tracking-tighter uppercase italic leading-none">
-              Season <span className="text-f1-red">{selectedYear}</span> <br />
-              {standingsType === 'drivers' ? 'Driver' : 'Constructor'} Status
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-[#1A1A1A] leading-[0.9] tracking-tight">
+              Season <em className="text-[#D4AF37]">{selectedYear}</em>
             </h1>
           </div>
 
@@ -98,28 +88,27 @@ export default function StandingsPage() {
             <div className="relative">
               <button
                 onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
-                className="flex items-center gap-3 px-5 py-3 bg-white border-2 border-border rounded-xl hover:border-text-primary transition-all w-full sm:w-auto justify-between"
+                className="flex items-center gap-3 px-5 py-3 bg-transparent border border-[#1A1A1A]/10 hover:border-[#1A1A1A] transition-all duration-500 w-full sm:w-auto justify-between"
               >
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-f1-red" />
-                  <span className="text-sm font-black text-text-primary uppercase italic">{selectedYear}</span>
+                  <Calendar className="w-3.5 h-3.5 text-[#D4AF37]" strokeWidth={1.5} />
+                  <span className="font-sans text-xs font-medium text-[#1A1A1A] uppercase tracking-[0.15em]">{selectedYear}</span>
                 </div>
-                <ChevronDown className={`w-4 h-4 text-text-muted transition-transform ${yearDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-[#6C6863] transition-transform duration-500 ${yearDropdownOpen ? 'rotate-180' : ''}`} strokeWidth={1.5} />
               </button>
 
-              {/* Year Dropdown */}
               {yearDropdownOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setYearDropdownOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 z-50 bg-white border-2 border-border rounded-2xl shadow-xl w-[320px] sm:w-[380px] max-h-[400px] overflow-y-auto">
-                    <div className="p-4 border-b border-border sticky top-0 bg-white rounded-t-2xl z-10">
-                      <div className="text-[10px] font-black text-text-muted uppercase tracking-widest">Select Season</div>
-                      <div className="text-xs font-bold text-text-secondary mt-1">F1 World Championship • 1950 → {CURRENT_YEAR}</div>
+                  <div className="absolute right-0 top-full mt-2 z-50 bg-[#F9F8F6] border border-[#1A1A1A]/10 shadow-xl w-[320px] sm:w-[380px] max-h-[400px] overflow-y-auto">
+                    <div className="p-4 border-b border-[#1A1A1A]/10 sticky top-0 bg-[#F9F8F6] z-10">
+                      <div className="font-sans text-[10px] font-medium uppercase tracking-[0.25em] text-[#6C6863]">Select Season</div>
+                      <div className="font-sans text-xs text-[#6C6863] mt-1">F1 World Championship · 1950 → {CURRENT_YEAR}</div>
                     </div>
                     <div className="p-3">
                       {Object.entries(DECADES).map(([decade, years]) => (
                         <div key={decade} className="mb-4 last:mb-0">
-                          <div className="text-[9px] font-black text-f1-red uppercase tracking-widest px-2 mb-2">{decade}</div>
+                          <div className="font-sans text-[9px] font-medium uppercase tracking-[0.25em] text-[#D4AF37] px-2 mb-2">{decade}</div>
                           <div className="grid grid-cols-5 gap-1.5">
                             {years.map((year) => (
                               <button
@@ -127,15 +116,14 @@ export default function StandingsPage() {
                                 onClick={() => {
                                   setSelectedYear(year)
                                   setYearDropdownOpen(false)
-                                  // Auto-switch to drivers if constructor standings not available
                                   if (year < FIRST_CONSTRUCTOR_YEAR && standingsType === 'constructors') {
                                     setStandingsType('drivers')
                                   }
                                 }}
-                                className={`py-2 px-1 text-xs font-black rounded-lg transition-all text-center ${
+                                className={`py-2 px-1 font-sans text-xs font-medium transition-all duration-500 text-center ${
                                   year === selectedYear
-                                    ? 'bg-f1-red text-white shadow-md'
-                                    : 'text-text-secondary hover:bg-bg-subtle hover:text-text-primary'
+                                    ? 'bg-[#1A1A1A] text-[#F9F8F6]'
+                                    : 'text-[#6C6863] hover:bg-[#EBE5DE] hover:text-[#1A1A1A]'
                                 }`}
                               >
                                 {year}
@@ -151,34 +139,32 @@ export default function StandingsPage() {
             </div>
 
             {/* Type Toggles */}
-            <div className="flex p-1 bg-bg-subtle rounded-xl border border-border">
+            <div className="flex border border-[#1A1A1A]/10">
               <button
                 onClick={() => setStandingsType('drivers')}
-                className={`px-5 sm:px-8 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 ${
+                className={`px-6 py-3 font-sans text-[10px] font-medium uppercase tracking-[0.2em] transition-all duration-500 flex items-center gap-2 ${
                   standingsType === 'drivers'
-                    ? 'bg-f1-red text-white shadow-md'
-                    : 'text-text-muted hover:text-text-primary'
+                    ? 'bg-[#1A1A1A] text-[#F9F8F6]'
+                    : 'text-[#6C6863] hover:text-[#1A1A1A]'
                 }`}
               >
-                <User className="w-3 h-3" />
+                <User className="w-3 h-3" strokeWidth={1.5} />
                 Drivers
               </button>
               <button
                 onClick={() => {
-                  if (selectedYear >= FIRST_CONSTRUCTOR_YEAR) {
-                    setStandingsType('constructors')
-                  }
+                  if (selectedYear >= FIRST_CONSTRUCTOR_YEAR) setStandingsType('constructors')
                 }}
-                className={`px-5 sm:px-8 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 ${
+                className={`px-6 py-3 font-sans text-[10px] font-medium uppercase tracking-[0.2em] transition-all duration-500 flex items-center gap-2 ${
                   standingsType === 'constructors'
-                    ? 'bg-f1-red text-white shadow-md'
+                    ? 'bg-[#1A1A1A] text-[#F9F8F6]'
                     : selectedYear < FIRST_CONSTRUCTOR_YEAR
-                    ? 'text-text-muted/30 cursor-not-allowed'
-                    : 'text-text-muted hover:text-text-primary'
+                    ? 'text-[#6C6863]/30 cursor-not-allowed'
+                    : 'text-[#6C6863] hover:text-[#1A1A1A]'
                 }`}
                 title={selectedYear < FIRST_CONSTRUCTOR_YEAR ? `Constructor championship started in ${FIRST_CONSTRUCTOR_YEAR}` : ''}
               >
-                <Building2 className="w-3 h-3" />
+                <Building2 className="w-3 h-3" strokeWidth={1.5} />
                 Teams
               </button>
             </div>
@@ -186,9 +172,9 @@ export default function StandingsPage() {
         </div>
 
         {/* Era Badge */}
-        <div className="mb-6 flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-bg-subtle border border-border rounded-lg text-[10px] font-black text-text-muted uppercase tracking-widest">
-            <Trophy className="w-3 h-3 text-f1-red" />
+        <div className="mb-8 flex flex-wrap items-center gap-4">
+          <div className="font-sans text-[10px] font-medium uppercase tracking-[0.25em] text-[#6C6863] flex items-center gap-2 border border-[#1A1A1A]/10 px-4 py-2">
+            <Trophy className="w-3 h-3 text-[#D4AF37]" strokeWidth={1.5} />
             {selectedYear >= 2022 ? 'Ground Effect Era' :
              selectedYear >= 2014 ? 'Turbo Hybrid Era' :
              selectedYear >= 2006 ? 'V8 Era' :
@@ -200,154 +186,150 @@ export default function StandingsPage() {
              selectedYear >= 1954 ? '2.5-Litre Era' :
              'Inaugural Era'}
           </div>
-          {selectedYear < FIRST_CONSTRUCTOR_YEAR && standingsType === 'constructors' && (
-            <div className="text-[10px] font-bold text-f1-red uppercase tracking-wider">
-              Constructor championship not available before {FIRST_CONSTRUCTOR_YEAR}
-            </div>
-          )}
         </div>
 
         {/* Content */}
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-32 gap-4">
             <LoadingSpinner />
-            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] animate-pulse">Retrieving {selectedYear} Grid Data...</p>
+            <p className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
+              Retrieving {selectedYear} data...
+            </p>
           </div>
         ) : data.length > 0 ? (
-          <div className="grid lg:grid-cols-12 gap-8">
-            {/* Main Table */}
-            <div className="lg:col-span-12 overflow-x-auto rounded-2xl border border-border">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-bg-subtle text-[10px] font-black uppercase tracking-widest text-text-muted border-b border-border">
-                    <th className="px-4 py-4 text-left w-20">POS</th>
-                    <th className="px-4 py-4 text-left">Competitor</th>
-                    <th className="px-4 py-4 text-left hidden sm:table-cell w-[180px]">Team</th>
-                    <th className="px-4 py-4 text-right w-24">Points</th>
-                    <th className="px-4 py-4 text-right w-20">Wins</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((standing: any, idx: number) => {
-                    const pos = parseInt(standing.position)
-                    const constructorId = standing.constructor?.constructorId || ''
-                    const teamColor = getTeamColor(constructorId)
-                    
-                    return (
-                      <tr 
-                        key={idx}
-                        className="f1-table-row border-b border-border group"
-                      >
-                        <td className="px-4 py-6">
-                           <span className={`text-2xl font-black italic tracking-tighter ${pos <= 3 ? 'text-f1-red' : 'text-text-primary'}`}>
-                               {pos.toString().padStart(2, '0')}
-                           </span>
-                        </td>
-                        
-                        <td className="px-4 py-6">
-                            <div className="flex items-center gap-4">
-                                {/* Driver Face Portrait (ZOOMED TO FACE ONLY) */}
-                                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-bg-subtle border border-border rounded-2xl flex items-center justify-center text-text-muted group-hover:bg-white transition-all overflow-hidden relative shadow-sm">
-                                    {standingsType === 'drivers' ? (
-                                      getDriverImage(standing.driver.familyName) ? (
-                                        <img 
-                                          src={getDriverImage(standing.driver.familyName)!}
-                                          className="absolute top-0 h-[350%] w-auto max-w-none object-contain object-top mt-1"
-                                          alt={standing.driver.familyName}
-                                        />
-                                      ) : (
-                                        <UserCircle2 className="w-8 h-8 opacity-10" />
-                                      )
-                                    ) : (
-                                      <Building2 className="w-8 h-8 opacity-10" />
-                                    )}
+          <div className="border-t border-[#1A1A1A]">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="font-sans text-[10px] font-medium uppercase tracking-[0.25em] text-[#6C6863] border-b border-[#1A1A1A]/10">
+                  <th className="px-4 py-5 text-left w-20">Pos</th>
+                  <th className="px-4 py-5 text-left">Competitor</th>
+                  <th className="px-4 py-5 text-left hidden sm:table-cell w-[180px]">Team</th>
+                  <th className="px-4 py-5 text-right w-24">Points</th>
+                  <th className="px-4 py-5 text-right w-20">Wins</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((standing: any, idx: number) => {
+                  const pos = parseInt(standing.position)
+                  const constructorId = standing.constructor?.constructorId || ''
+                  const teamColor = getTeamColor(constructorId)
+                  
+                  return (
+                    <tr 
+                      key={idx}
+                      className="border-b border-[#1A1A1A]/5 group hover:bg-[#1A1A1A]/[0.02] transition-colors duration-500"
+                    >
+                      <td className="px-4 py-6">
+                        <span className={`font-serif text-2xl tracking-tight ${pos <= 3 ? 'text-[#D4AF37]' : 'text-[#1A1A1A]'}`}>
+                          {pos.toString().padStart(2, '0')}
+                        </span>
+                      </td>
+                      
+                      <td className="px-4 py-6">
+                        <div className="flex items-center gap-4">
+                          {/* Driver image — grayscale default, color on hover */}
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 relative overflow-hidden shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)] bg-[#EBE5DE] flex items-center justify-center">
+                            <div className="absolute bottom-0 left-0 right-0 h-0.5 z-20" style={{ backgroundColor: teamColor }} />
+                            
+                            {standingsType === 'drivers' ? (
+                              getDriverImage(standing.driver.familyName) ? (
+                                <div className="relative w-full h-full">
+                                  <img 
+                                    src={getDriverImage(standing.driver.familyName)!}
+                                    className="absolute top-0 h-[320%] w-auto max-w-none object-contain object-top mt-1 grayscale group-hover:grayscale-0 transition-all duration-[1500ms] group-hover:scale-105"
+                                    alt={standing.driver.familyName}
+                                  />
                                 </div>
-                                <div className="min-w-0">
-                                    <div className="text-base sm:text-lg font-black text-text-primary uppercase italic leading-none transition-colors truncate">
-                                        {standingsType === 'drivers' ? (
-                                            <Link
-                                              to={`/driver/${standing.driver.driverId}`}
-                                              className="hover:text-f1-red transition-colors"
-                                            >
-                                              <span className="opacity-60">{standing.driver.givenName}</span> <span className="text-f1-red">{standing.driver.familyName}</span>
-                                            </Link>
-                                        ) : (
-                                            <Link
-                                              to={`/constructor/${standing.constructor.constructorId}`}
-                                              className="hover:text-f1-red transition-colors"
-                                            >
-                                              {standing.constructor.name}
-                                            </Link>
-                                        )}
-                                    </div>
-                                    <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mt-1.5 flex items-center gap-2">
-                                        <img 
-                                          src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${standing.driver?.nationality === 'British' ? 'GB' : standing.driver?.nationality === 'Monegasque' ? 'MC' : standing.driver?.nationality === 'Italian' ? 'IT' : 'UN'}.svg`}
-                                          className="w-3 h-2 block"
-                                          onError={(e) => (e.currentTarget.style.display = 'none')}
-                                        />
-                                        {standingsType === 'drivers' ? standing.driver.nationality : standing.constructor.nationality}
-                                    </div>
-                                    {/* Show team on mobile for drivers */}
-                                    {standingsType === 'drivers' && (
-                                      <div className="sm:hidden flex items-center gap-1.5 mt-1">
-                                        <div className="w-1 h-3 rounded-full" style={{ backgroundColor: teamColor }} />
-                                        <span className="text-[9px] font-bold uppercase text-text-muted">{standing.constructor.name}</span>
-                                      </div>
-                                    )}
-                                </div>
+                              ) : (
+                                <UserCircle2 className="w-6 h-6 text-[#1A1A1A]/10" strokeWidth={1} />
+                              )
+                            ) : (
+                              getTeamLogo(standing.constructor.name) ? (
+                                <img src={getTeamLogo(standing.constructor.name)!} alt={standing.constructor.name} className="w-8 h-8 object-contain brightness-0" />
+                              ) : (
+                                <Building2 className="w-6 h-6 text-[#1A1A1A]/10" strokeWidth={1} />
+                              )
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-serif text-base sm:text-lg text-[#1A1A1A] leading-none truncate">
+                              {standingsType === 'drivers' ? (
+                                <Link
+                                  to={`/driver/${standing.driver.givenName.toLowerCase()}_${standing.driver.familyName.toLowerCase().replace(/ /g, '_')}`}
+                                  className="hover:text-[#D4AF37] transition-colors duration-500"
+                                >
+                                  <span className="text-[#6C6863]">{standing.driver.givenName}</span>{' '}
+                                  {standing.driver.familyName}
+                                </Link>
+                              ) : (
+                                <Link
+                                  to={`/constructor/${standing.constructor.constructorId}`}
+                                  className="hover:text-[#D4AF37] transition-colors duration-500"
+                                >
+                                  {standing.constructor.name}
+                                </Link>
+                              )}
                             </div>
-                        </td>
+                            <div className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#6C6863] mt-1.5">
+                              {standingsType === 'drivers' ? standing.driver.nationality : standing.constructor.nationality}
+                            </div>
+                            {standingsType === 'drivers' && (
+                              <div className="sm:hidden flex items-center gap-1.5 mt-1">
+                                <div className="w-0.5 h-3" style={{ backgroundColor: teamColor }} />
+                                <span className="font-sans text-[9px] font-medium uppercase text-[#6C6863]">{standing.constructor.name}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </td>
 
-                        {standingsType === 'drivers' && (
-                            <td className="px-4 sm:px-6 py-4 sm:py-6 hidden sm:table-cell">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-6 rounded-full" style={{ backgroundColor: teamColor }} />
-                                    <Link
-                                      to={`/constructor/${standing.constructor.constructorId}`}
-                                      className="text-[11px] font-black uppercase italic text-text-secondary tracking-tight hover:text-f1-red transition-colors"
-                                    >
-                                        {standing.constructor.name}
-                                    </Link>
-                                </div>
-                            </td>
-                        )}
-
-                        <td className="px-4 sm:px-6 py-4 sm:py-6 text-right">
-                           <div className="text-lg sm:text-xl font-black text-text-primary tabular-nums tracking-tighter">
-                               {standing.points}
-                           </div>
+                      {standingsType === 'drivers' && (
+                        <td className="px-4 py-6 hidden sm:table-cell">
+                          <div className="flex items-center gap-3">
+                            {getTeamLogo(standing.constructor.name) ? (
+                              <img src={getTeamLogo(standing.constructor.name)!} alt={standing.constructor.name} className="w-5 h-5 object-contain brightness-0" />
+                            ) : (
+                              <div className="w-0.5 h-5" style={{ backgroundColor: teamColor }} />
+                            )}
+                            <Link
+                              to={`/constructor/${standing.constructor.constructorId}`}
+                              className="font-sans text-xs font-medium text-[#6C6863] uppercase tracking-[0.1em] hover:text-[#D4AF37] transition-colors duration-500"
+                            >
+                              {standing.constructor.name}
+                            </Link>
+                          </div>
                         </td>
+                      )}
 
-                        <td className="px-4 sm:px-6 py-4 sm:py-6 text-right">
-                           <div className={`text-xs font-black italic uppercase ${parseInt(standing.wins) > 0 ? 'text-f1-red' : 'text-text-muted/30'}`}>
-                                {standing.wins}W
-                           </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
+                      <td className="px-4 py-6 text-right">
+                        <div className="font-serif text-xl text-[#1A1A1A] tabular-nums">
+                          {standing.points}
+                        </div>
+                      </td>
+
+                      <td className="px-4 py-6 text-right">
+                        <div className={`font-sans text-xs font-medium uppercase tracking-[0.1em] ${parseInt(standing.wins) > 0 ? 'text-[#D4AF37]' : 'text-[#1A1A1A]/15'}`}>
+                          {standing.wins}W
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
         ) : (
-            <div className="py-32 text-center border-2 border-dashed border-border rounded-2xl">
-                <Trophy className="w-12 h-12 text-text-muted mx-auto mb-4 opacity-20" />
-                <h3 className="text-xl font-black text-text-primary uppercase italic mb-2">No Data Available</h3>
-                <p className="text-text-secondary text-sm">
-                  {selectedYear === CURRENT_YEAR 
-                    ? 'Season has not started yet. Check back after the first race.'
-                    : `Standings data for ${selectedYear} is not available.`}
-                </p>
-            </div>
+          <div className="py-32 text-center border-t border-[#1A1A1A]/10">
+            <Trophy className="w-10 h-10 text-[#1A1A1A]/10 mx-auto mb-6" strokeWidth={1} />
+            <h3 className="font-serif text-2xl text-[#1A1A1A] mb-3">No Data Available</h3>
+            <p className="font-sans text-sm text-[#6C6863]">
+              {selectedYear === CURRENT_YEAR 
+                ? 'Season has not started yet.'
+                : `Standings data for ${selectedYear} is not available.`}
+            </p>
+          </div>
         )}
       </div>
-
-       <style>{`
-        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-      `}</style>
     </div>
   )
 }

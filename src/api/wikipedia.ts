@@ -34,25 +34,54 @@ async function fetchSummary(searchTitle: string): Promise<WikiSummary | null> {
 }
 
 function sanitizeHtml(rawHtml: string): string {
-  return rawHtml
-    .replace(/<a\s[^>]*href="\/wiki\/[^"]*"[^>]*>([\s\S]*?)<\/a>/g, '$1')
-    .replace(/<a\s[^>]*href="#[^"]*"[^>]*>([\s\S]*?)<\/a>/g, '$1')
-    .replace(/<span[^>]*class="[^"]*mw-editsection[^"]*"[^>]*>[\s\S]*?<\/span>/g, '')
-    .replace(/<sup[^>]*class="[^"]*reference[^"]*"[^>]*>[\s\S]*?<\/sup>/g, '')
-    .replace(/<div[^>]*class="[^"]*reflist[^"]*"[^>]*>[\s\S]*?<\/div>/g, '')
-    .replace(/<table[^>]*class="[^"]*infobox[^"]*"[^>]*>[\s\S]*?<\/table>/g, '')
-    .replace(/<table[^>]*class="[^"]*navbox[^"]*"[^>]*>[\s\S]*?<\/table>/g, '')
-    .replace(/<div[^>]*class="[^"]*hatnote[^"]*"[^>]*>[\s\S]*?<\/div>/g, '')
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(rawHtml, 'text/html')
+
+  // Remove unwanted Wikipedia elements
+  const selectorsToRemove = [
+    '.mw-editsection',
+    '.reference',
+    '.reflist',
+    '.infobox',
+    '.navbox',
+    '.hatnote',
+    '.metadata',
+    '.ambox',
+    '.sistersitebox',
+    '.mw-empty-elt',
+    '[id="References"]',
+    '[id="See_also"]',
+    '[id="External_links"]'
+  ]
+  const elementsToRemove = doc.querySelectorAll(selectorsToRemove.join(', '))
+  elementsToRemove.forEach(el => el.remove())
+
+  // Strip links but keep text
+  doc.querySelectorAll('a').forEach(a => {
+    const href = a.getAttribute('href')
+    if (href?.startsWith('/wiki/') || href?.startsWith('#')) {
+      const fragment = doc.createDocumentFragment()
+      while (a.firstChild) {
+        fragment.appendChild(a.firstChild)
+      }
+      a.parentNode?.replaceChild(fragment, a)
+    }
+  })
+
+  return doc.body.innerHTML
 }
 
 async function fetchFullPage(wikiTitle: string): Promise<WikiFullPage | null> {
   try {
-    const encoded = encodeURIComponent(wikiTitle.replace(/ /g, '_'))
+    // For REST summary endpoint: encode the whole title as a path segment
+    const titleForPath = encodeURIComponent(wikiTitle.replace(/ /g, '_'))
+    // For MediaWiki Action API: pass as a query-string value (no extra encoding needed)
+    const titleForQuery = wikiTitle.replace(/ /g, '_')
 
     const [summaryRes, sectionsRes, htmlRes] = await Promise.all([
-      fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encoded}`),
-      fetch(`https://en.wikipedia.org/w/api.php?action=parse&page=${encoded}&prop=sections&format=json&origin=*`),
-      fetch(`https://en.wikipedia.org/w/api.php?action=parse&page=${encoded}&prop=text&disableeditsection=1&format=json&origin=*`),
+      fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${titleForPath}`),
+      fetch(`https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(titleForQuery)}&prop=sections&redirects=1&format=json&origin=*`),
+      fetch(`https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(titleForQuery)}&prop=text&redirects=1&disableeditsection=1&format=json&origin=*`),
     ])
 
     const summary = summaryRes.ok ? await summaryRes.json() : null
@@ -112,10 +141,82 @@ export async function getConstructorWikiSummary(teamName: string): Promise<WikiS
   return fetchSummary(teamName)
 }
 
-export async function getDriverFullPage(fullName: string): Promise<WikiFullPage | null> {
-  const specific = await fetchFullPage(`${fullName} (racing driver)`)
-  if (specific) return specific
-  return fetchFullPage(fullName)
+/**
+ * Explicit Wikipedia article title map keyed by accent-normalized driver ID
+ * (e.g. "sergio_perez", "nico_hulkenberg").
+ * This avoids any fragile disambiguation guessing.
+ */
+const DRIVER_WIKI_MAP: Record<string, string> = {
+  // 2026 grid
+  'max_verstappen':      'Max Verstappen',
+  'lando_norris':        'Lando Norris',
+  'charles_leclerc':     'Charles Leclerc',
+  'oscar_piastri':       'Oscar Piastri',
+  'george_russell':      'George Russell (racing driver)',
+  'lewis_hamilton':      'Lewis Hamilton',
+  'carlos_sainz':        'Carlos Sainz Jr.',
+  'fernando_alonso':     'Fernando Alonso',
+  'lance_stroll':        'Lance Stroll',
+  'pierre_gasly':        'Pierre Gasly',
+  'esteban_ocon':        'Esteban Ocon',
+  'alexander_albon':     'Alexander Albon',
+  'alex_albon':          'Alexander Albon',
+  'valtteri_bottas':     'Valtteri Bottas',
+  'nico_hulkenberg':     'Nico Hülkenberg',
+  'sergio_perez':        'Sergio Pérez',
+  'yuki_tsunoda':        'Yuki Tsunoda',
+  'liam_lawson':         'Liam Lawson (racing driver)',
+  'oliver_bearman':      'Oliver Bearman',
+  'kimi_antonelli':      'Andrea Kimi Antonelli',
+  'isack_hadjar':        'Isack Hadjar',
+  'gabriel_bortoleto':   'Gabriel Bortoleto',
+  'franco_colapinto':    'Franco Colapinto',
+  'jack_doohan':         'Jack Doohan (racing driver)',
+  'oliver_oakes':        'Oliver Oakes',
+  'arvid_lindblad':      'Arvid Lindblad',
+  // Legends (for historic pages)
+  'michael_schumacher':  'Michael Schumacher',
+  'ayrton_senna':        'Ayrton Senna',
+  'alain_prost':         'Alain Prost',
+  'niki_lauda':          'Niki Lauda',
+  'juan_manuel_fangio':  'Juan Manuel Fangio',
+  'sebastian_vettel':    'Sebastian Vettel',
+  'kimi_raikkonen':      'Kimi Räikkönen',
+  'jenson_button':       'Jenson Button',
+  'nico_rosberg':        'Nico Rosberg',
+  'mika_hakkinen':       'Mika Häkkinen',
+  'damon_hill':          'Damon Hill',
+  'nigel_mansell':       'Nigel Mansell',
+  'nelson_piquet':       'Nelson Piquet',
+  'jackie_stewart':      'Jackie Stewart',
+  'jim_clark':           'Jim Clark (racing driver)',
+  'graham_hill':         'Graham Hill',
+  'emerson_fittipaldi':  'Emerson Fittipaldi',
+  'jochen_rindt':        'Jochen Rindt',
+}
+
+export async function getDriverFullPage(driverIdOrName: string): Promise<WikiFullPage | null> {
+  // Normalize to accent-free lowercase key (e.g. "Sergio Pérez" → "sergio_perez")
+  const key = driverIdOrName
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, '_')
+    .replace(/[^a-z0-9_]/g, '')
+
+  // 1. Try the explicit map first — most reliable
+  const mappedTitle = DRIVER_WIKI_MAP[key]
+  if (mappedTitle) {
+    const result = await fetchFullPage(mappedTitle)
+    if (result) return result
+  }
+
+  // 2. Try with (racing driver) suffix in case of disambiguation
+  const withSuffix = await fetchFullPage(`${driverIdOrName} (racing driver)`)
+  if (withSuffix) return withSuffix
+
+  // 3. Last resort: plain name
+  return fetchFullPage(driverIdOrName)
 }
 
 export async function getConstructorFullPage(constructorId: string): Promise<WikiFullPage | null> {

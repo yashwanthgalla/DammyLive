@@ -1,11 +1,11 @@
 /**
  * Header Component
- * Minimalist Red Edition — with logo image & responsive mobile menu
+ * Luxury Editorial Edition — Minimal, architectural navigation
  */
 
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Calendar, Trophy, Map, Radio, UserCircle2, Users, Menu, X, LogOut } from 'lucide-react'
+import { Calendar, Trophy, Map, Users, Menu, X, LogOut } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 
 const navLinks = [
@@ -24,97 +24,91 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-white/95 backdrop-blur-md">
-        <div className="container px-md py-3 sm:py-4">
-          <div className="flex items-center justify-between gap-3 sm:gap-md">
-            {/* Logo */}
+      <header className="sticky top-0 z-50 w-full border-b border-[#1A1A1A]/10 bg-[#F9F8F6]/95 backdrop-blur-md">
+        <div className="max-w-[1600px] mx-auto px-8 md:px-16 py-5">
+          <div className="flex items-center justify-between">
+            {/* Logo — Editorial serif */}
             <Link
               to="/"
-              className="flex items-center gap-2 group flex-shrink-0"
-              title="Dammylive Telemetry Hub"
+              className="flex items-center gap-3 group flex-shrink-0"
+              title="DammyLive Editorial"
             >
-              <div className="relative">
-                <img
-                  src="/logo.png"
-                  alt="DammyLive"
-                  className="w-8 h-8 sm:w-9 sm:h-9 object-contain group-hover:scale-110 transition-transform"
-                />
-              </div>
-              <div className="flex flex-col -space-y-1 mt-0.5">
-                <span className="text-lg sm:text-2xl font-black italic tracking-tighter text-text-primary uppercase group-hover:text-f1-red transition-colors">
-                  Dammy<span className="text-f1-red group-hover:text-text-primary transition-colors">Live</span>
+              <img
+                src="/logo.png"
+                alt="DammyLive"
+                className="w-8 h-8 object-contain grayscale group-hover:grayscale-0 transition-all duration-[1500ms]"
+              />
+              <div className="flex flex-col">
+                <span className="font-serif text-xl md:text-2xl text-[#1A1A1A] tracking-tight leading-none group-hover:text-[#D4AF37] transition-colors duration-500">
+                  Dammy<em className="text-[#D4AF37] group-hover:text-[#1A1A1A] transition-colors duration-500">Live</em>
                 </span>
-                <span className="text-[6px] sm:text-[7px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-text-muted hidden xs:block">
-                  Telemetry Hub // 2026
+                <span className="font-sans text-[8px] font-medium uppercase tracking-[0.3em] text-[#6C6863] hidden sm:block">
+                  Editorial · 2026
                 </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1 bg-bg-subtle p-1 rounded-xl border border-border">
+            {/* Desktop Navigation — Minimal text links */}
+            <nav className="hidden lg:flex items-center gap-10">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`flex items-center gap-2 px-4 xl:px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                  className={`font-sans text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-500 relative pb-1 ${
                     isActive(link.to)
-                      ? 'bg-f1-red text-white'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-white'
+                      ? 'text-[#1A1A1A]'
+                      : 'text-[#6C6863] hover:text-[#D4AF37]'
                   }`}
                 >
-                  <link.icon className="w-3.5 h-3.5" />
                   {link.label}
+                  {isActive(link.to) && (
+                    <span className="absolute bottom-0 left-0 right-0 h-px bg-[#1A1A1A]" />
+                  )}
                 </Link>
               ))}
             </nav>
 
             {/* Actions */}
-            <div className="flex items-center gap-2 sm:gap-4">
-              <div className="hidden xl:flex items-center gap-2 text-[10px] font-black text-f1-red uppercase tracking-widest bg-f1-red/5 px-4 py-2 border border-f1-red/10 rounded-xl">
-                <Radio className="w-3 h-3 animate-pulse" />
-                System Active
-              </div>
-
+            <div className="flex items-center gap-6">
               {isAuthenticated ? (
-                <div className="flex items-center gap-2">
-                  <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-bg-subtle border border-border rounded-xl">
+                <div className="flex items-center gap-4">
+                  <div className="hidden sm:flex items-center gap-3">
                     {user?.photoURL ? (
-                      <img src={user.photoURL} alt={user.name} className="w-6 h-6 rounded-full object-cover" />
+                      <img src={user.photoURL} alt={user.name} className="w-7 h-7 object-cover grayscale hover:grayscale-0 transition-all duration-[1500ms]" />
                     ) : (
-                      <div className="w-6 h-6 bg-f1-red rounded-full flex items-center justify-center text-white text-[8px] font-black">
+                      <div className="w-7 h-7 bg-[#1A1A1A] flex items-center justify-center text-[#F9F8F6] text-[9px] font-sans font-medium uppercase tracking-wider">
                         {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                       </div>
                     )}
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-primary max-w-[80px] truncate">
+                    <span className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#1A1A1A] max-w-[80px] truncate">
                       {user?.name || 'User'}
                     </span>
                   </div>
                   <button
                     onClick={() => logout()}
-                    className="flex items-center gap-1 px-3 py-2 bg-text-primary text-white hover:bg-f1-red transition-all rounded-xl"
-                    title="Logout"
+                    className="flex items-center gap-2 font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#6C6863] hover:text-[#D4AF37] transition-colors duration-500"
+                    title="Sign Out"
                   >
-                    <LogOut className="w-4 h-4" />
-                    <span className="hidden sm:inline text-[10px] font-black uppercase tracking-widest">Exit</span>
+                    <LogOut className="w-3.5 h-3.5" strokeWidth={1.5} />
+                    <span className="hidden sm:inline">Exit</span>
                   </button>
                 </div>
               ) : (
                 <Link
                   to="/auth"
-                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-text-primary text-white hover:bg-f1-red transition-all rounded-xl"
+                  className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#6C6863] hover:text-[#D4AF37] transition-colors duration-500"
                 >
-                  <UserCircle2 className="w-4 h-4" />
-                  <span className="hidden sm:inline text-[10px] font-black uppercase tracking-widest">Join Network</span>
+                  Sign In
                 </Link>
               )}
 
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden flex items-center justify-center w-10 h-10 border border-border rounded-xl hover:bg-bg-subtle transition-colors"
+                className="lg:hidden flex items-center justify-center w-10 h-10 text-[#1A1A1A] hover:text-[#D4AF37] transition-colors duration-500"
                 aria-label="Toggle menu"
               >
-                {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {mobileOpen ? <X className="w-5 h-5" strokeWidth={1.5} /> : <Menu className="w-5 h-5" strokeWidth={1.5} />}
               </button>
             </div>
           </div>
@@ -126,60 +120,58 @@ export default function Header() {
         <div className="fixed inset-0 z-40 lg:hidden">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#1A1A1A]/20 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          {/* Drawer */}
-          <nav className="absolute top-0 right-0 w-[80%] max-w-[320px] h-full bg-white border-l border-border shadow-xl flex flex-col animate-slide-in-right">
+          {/* Drawer — Editorial */}
+          <nav className="absolute top-0 right-0 w-[80%] max-w-[360px] h-full bg-[#F9F8F6] border-l border-[#1A1A1A]/10 flex flex-col animate-slide-in-right">
             {/* Drawer Header */}
-            <div className="flex items-center justify-between p-6 border-b border-border">
+            <div className="flex items-center justify-between px-8 py-6 border-b border-[#1A1A1A]/10">
               <div className="flex items-center gap-2">
-                <img src="/logo.png" alt="DammyLive" className="w-7 h-7 object-contain" />
-                <span className="text-lg font-black italic tracking-tighter text-text-primary uppercase">
-                  Dammy<span className="text-f1-red">Live</span>
+                <img src="/logo.png" alt="DammyLive" className="w-6 h-6 object-contain grayscale" />
+                <span className="font-serif text-lg text-[#1A1A1A] tracking-tight">
+                  Dammy<em className="text-[#D4AF37]">Live</em>
                 </span>
               </div>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="w-10 h-10 flex items-center justify-center border border-border rounded-xl hover:bg-bg-subtle transition-colors"
+                className="w-10 h-10 flex items-center justify-center text-[#1A1A1A] hover:text-[#D4AF37] transition-colors duration-500"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5" strokeWidth={1.5} />
               </button>
             </div>
 
             {/* Nav Links */}
-            <div className="flex-1 overflow-y-auto py-4">
+            <div className="flex-1 overflow-y-auto py-8">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-4 px-6 py-4 text-xs font-black uppercase tracking-widest transition-all border-l-4 ${
+                  className={`flex items-center gap-4 px-8 py-5 font-sans text-xs font-medium uppercase tracking-[0.2em] transition-all duration-500 border-l-2 ${
                     isActive(link.to)
-                      ? 'bg-f1-red/5 text-f1-red border-l-f1-red'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-bg-subtle border-l-transparent'
+                      ? 'text-[#1A1A1A] border-l-[#D4AF37] bg-[#EBE5DE]/30'
+                      : 'text-[#6C6863] hover:text-[#1A1A1A] border-l-transparent hover:border-l-[#1A1A1A]/20'
                   }`}
                 >
-                  <link.icon className="w-5 h-5" />
+                  <link.icon className="w-4 h-4" strokeWidth={1.5} />
                   {link.label}
                 </Link>
               ))}
             </div>
 
             {/* Drawer Footer */}
-            <div className="p-6 border-t border-border">
-              <div className="flex items-center gap-2 text-[10px] font-black text-f1-red uppercase tracking-widest bg-f1-red/5 px-4 py-3 border border-f1-red/10 rounded-xl mb-4 justify-center">
-                <Radio className="w-3 h-3 animate-pulse" />
-                System Active
+            <div className="px-8 py-6 border-t border-[#1A1A1A]/10">
+              <div className="font-sans text-[9px] font-medium uppercase tracking-[0.25em] text-[#6C6863] mb-3">
+                Editorial · Volume 01
               </div>
               {!isAuthenticated && (
                 <Link
                   to="/auth"
                   onClick={() => setMobileOpen(false)}
-                  className="btn-primary w-full py-3 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                  className="btn-primary w-full py-3 flex items-center justify-center"
                 >
-                  <UserCircle2 className="w-4 h-4" />
-                  Join Network
+                  <span>Sign In</span>
                 </Link>
               )}
             </div>
@@ -192,7 +184,7 @@ export default function Header() {
           from { transform: translateX(100%); }
           to { transform: translateX(0); }
         }
-        .animate-slide-in-right { animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+        .animate-slide-in-right { animation: slide-in-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
       `}</style>
     </>
   )

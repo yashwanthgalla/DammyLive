@@ -1,6 +1,6 @@
 /**
- * Countdown Component
- * Displays countdown timer to session start or session status
+ * Countdown Component — Luxury Editorial
+ * Displays countdown timer with serif numerals
  */
 
 import { useSessionTimer } from '@/hooks/useSessionTimer'
@@ -12,10 +12,6 @@ interface CountdownProps {
   showLabel?: boolean
 }
 
-/**
- * Countdown timer component
- * Shows time until session or "LIVE" if session has started
- */
 export default function Countdown({
   dateStart,
   size = 'md',
@@ -29,7 +25,7 @@ export default function Countdown({
   }, [])
 
   if (!isMounted) {
-    return <div className={`text-center font-semibold ${size === 'lg' ? 'text-2xl' : 'text-sm'}`}>--:--</div>
+    return <div className={`text-center font-serif ${size === 'lg' ? 'text-2xl' : 'text-sm'} text-[#6C6863]`}>--:--</div>
   }
 
   const sizeClasses = {
@@ -40,8 +36,8 @@ export default function Countdown({
 
   if (timer.isExpired) {
     return (
-      <div className={`${sizeClasses[size]} font-bold text-primary text-center`}>
-        🔴 LIVE
+      <div className={`${sizeClasses[size]} font-sans font-medium text-[#D4AF37] text-center uppercase tracking-[0.2em] text-xs`}>
+        Live
       </div>
     )
   }
@@ -49,9 +45,9 @@ export default function Countdown({
   const display = `${timer.days}d ${timer.hours}h ${timer.minutes}m ${timer.seconds}s`
 
   return (
-    <div className={`${sizeClasses[size]} font-semibold text-center`}>
-      <div>{display}</div>
-      {showLabel && <div className="text-xs text-muted-foreground mt-1">until start</div>}
+    <div className={`${sizeClasses[size]} text-center`}>
+      <div className="font-mono text-[#1A1A1A] tabular-nums">{display}</div>
+      {showLabel && <div className="font-sans text-[10px] text-[#6C6863] mt-1 uppercase tracking-[0.2em]">until start</div>}
     </div>
   )
 }

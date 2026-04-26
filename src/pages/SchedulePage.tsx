@@ -1,6 +1,6 @@
 /**
  * SchedulePage - F1 Race Calendar
- * Minimalist Red Edition
+ * Luxury Editorial Edition
  */
 
 import { useState } from 'react'
@@ -13,21 +13,32 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner'
 import { Link } from 'react-router-dom'
 import { formatSessionDateTime } from '@/utils/timeFormatters'
 import { Session } from '@/types/f1'
-import { Flag, Zap, Clock, Trophy, ChevronRight, MapPin, UserCircle2, ChevronDown, ChevronUp } from 'lucide-react'
+import { Flag, Zap, Clock, Trophy, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { getDriverImage } from '@/lib/imageMap'
+
+const getFlagUrl = (countryCode?: string) => {
+  if (!countryCode) return null;
+  const map: Record<string, string> = {
+    BRN: 'bh', KSA: 'sa', AUS: 'au', JPN: 'jp', CHN: 'cn',
+    USA: 'us', ITA: 'it', MON: 'mc', CAN: 'ca', ESP: 'es',
+    AUT: 'at', GBR: 'gb', HUN: 'hu', BEL: 'be', NED: 'nl',
+    AZE: 'az', SGP: 'sg', MEX: 'mx', BRA: 'br', QAT: 'qa',
+    UAE: 'ae'
+  }
+  const iso2 = map[countryCode.toUpperCase()]
+  return iso2 ? `https://flagcdn.com/h24/${iso2}.png` : null
+}
 
 export default function SchedulePage() {
   const selectedYear = useUIStore((state) => state.selectedYear)
   const [expandedRace, setExpandedRace] = useState<string | null>(null)
 
-  // Fetch sessions for current year
   const sessionsQuery = useQuery({
     queryKey: ['sessions', selectedYear],
     queryFn: () => getSessions(selectedYear),
     staleTime: 60 * 60 * 1000,
   })
 
-  // Fetch results for winners
   const resultsQuery = useQuery({
     queryKey: ['seasonResults', selectedYear],
     queryFn: () => getSeasonResults(selectedYear),
@@ -42,24 +53,22 @@ export default function SchedulePage() {
     return (
       <div className="flex flex-col items-center justify-center py-32 gap-4">
         <LoadingSpinner />
-        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] animate-pulse">Syncing Calendar...</p>
       </div>
     )
   }
 
   if (sessions.length === 0) {
     return (
-      <div className="container py-24 text-center">
-        <div className="max-w-md mx-auto p-12 border-2 border-dashed border-border rounded-sm">
-          <h1 className="text-xl font-black text-text-primary uppercase italic mb-2">Error 503</h1>
-          <p className="text-text-secondary text-sm mb-8">Service unavailable.</p>
-          <button onClick={() => window.location.reload()} className="btn-primary w-full">Retry Connection</button>
+      <div className="max-w-[1600px] mx-auto px-8 md:px-16 py-32 text-center">
+        <div className="max-w-md mx-auto p-12 border-t border-[#1A1A1A]">
+          <h1 className="font-serif text-2xl text-[#1A1A1A] mb-3">Service Unavailable</h1>
+          <p className="font-sans text-sm text-[#6C6863] mb-8">Calendar data could not be retrieved.</p>
+          <button onClick={() => window.location.reload()} className="btn-primary w-full"><span>Retry</span></button>
         </div>
       </div>
     )
   }
 
-  // Group sessions by location
   const groupedSessions = sessions.reduce(
     (acc: Record<string, Session[]>, session: Session) => {
       const key = session.location || 'Global'
@@ -71,127 +80,124 @@ export default function SchedulePage() {
   )
 
   const sessionTypeIcon = (type: string) => {
+    const props = { className: "w-4 h-4", strokeWidth: 1.5 }
     switch (type.toLowerCase()) {
-      case 'practice': return <Flag className="w-4 h-4" />
-      case 'qualifying': return <Clock className="w-4 h-4" />
-      case 'sprint': return <Zap className="w-4 h-4" />
-      case 'race': return <Trophy className="w-4 h-4" />
-      default: return <Clock className="w-4 h-4" />
+      case 'practice': return <Flag {...props} />
+      case 'qualifying': return <Clock {...props} />
+      case 'sprint': return <Zap {...props} />
+      case 'race': return <Trophy {...props} />
+      default: return <Clock {...props} />
     }
   }
 
-  // Find winner for a location
   const getWinnerForRace = (location: string) => {
-    // Basic fuzzy match for location
     const result = results.find((r: any) => 
-        r.Circuit.Location.locality.toLowerCase().includes(location.toLowerCase()) ||
-        location.toLowerCase().includes(r.Circuit.Location.locality.toLowerCase())
+      r.Circuit.Location.locality.toLowerCase().includes(location.toLowerCase()) ||
+      location.toLowerCase().includes(r.Circuit.Location.locality.toLowerCase())
     )
     return result?.Results?.[0] || null
   }
 
   return (
-    <div className="min-h-screen bg-bg">
-      <div className="container px-4 sm:px-md py-8 sm:py-12 lg:py-xl">
+    <div className="min-h-screen bg-[#F9F8F6]">
+      <div className="max-w-[1600px] mx-auto px-8 md:px-16 py-12 md:py-20 lg:py-32">
         {/* Header */}
-        <div className="mb-8 sm:mb-12 lg:mb-16 border-b border-border pb-6 sm:pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-8">
-            <div>
-                <div className="inline-flex items-center gap-2 px-2 py-1 bg-f1-red text-white text-[10px] font-black uppercase tracking-widest mb-3 sm:mb-4">
-                    Season Calendar
-                </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-text-primary tracking-tighter uppercase italic leading-none">
-                    World <span className="text-f1-red">Championship</span> <br />
-                    Events {selectedYear}
-                </h1>
+        <div className="mb-12 md:mb-20 border-b border-[#1A1A1A]/10 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px w-8 md:w-12 bg-[#D4AF37]" />
+              <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
+                Season Calendar
+              </span>
             </div>
-            <div className="text-left md:text-right">
-                <div className="text-sm font-black text-text-primary uppercase italic">{sessions.length} Sessions</div>
-                <div className="text-[10px] font-bold text-text-muted uppercase tracking-widest mt-1">Satellite Verified</div>
-            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-[#1A1A1A] leading-[0.9] tracking-tight">
+              World <em className="text-[#D4AF37]">Championship</em>
+            </h1>
+          </div>
         </div>
 
         {/* Races List */}
-        <div className="space-y-10 sm:space-y-16">
+        <div className="space-y-16 md:space-y-24">
         {Object.entries(groupedSessions).map(([location, raceSessions]) => {
           const winner = getWinnerForRace(location)
           const isExpanded = expandedRace === location
           
           return (
             <div key={location} className="relative">
-              <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-4">
-                      <div className="w-2 h-8 bg-f1-red rounded-full" />
-                      <div>
-                         <h2 className="text-2xl font-black uppercase italic text-text-primary leading-none">{location}</h2>
-                         <div className="flex items-center gap-2 text-[10px] font-bold text-text-muted uppercase tracking-widest mt-1">
-                             <MapPin className="w-3 h-3 text-f1-red" />
-                             Circuit Venue Link Active
-                         </div>
-                      </div>
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-start gap-4 group cursor-default">
+                  <div className="w-0.5 h-10 mt-0.5 bg-[#D4AF37] group-hover:bg-[#1A1A1A] transition-colors duration-500" />
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <h2 className="font-serif text-2xl md:text-3xl text-[#1A1A1A] leading-none group-hover:text-[#D4AF37] transition-colors duration-500">{location}</h2>
+                      {getFlagUrl(raceSessions[0]?.country_code) && (
+                        <img 
+                          src={getFlagUrl(raceSessions[0]?.country_code)!} 
+                          alt="flag"
+                          className="h-[14px] md:h-[16px] w-auto shadow-[0_0_0_1px_rgba(26,26,26,0.1)] grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 mt-1" 
+                        />
+                      )}
+                    </div>
+                    <div className="font-sans text-[10px] font-medium text-[#6C6863] uppercase tracking-[0.25em] mt-2 group-hover:text-[#1A1A1A]/50 transition-colors duration-500">
+                      Circuit Venue
+                    </div>
                   </div>
-                  
-                  {winner && (
-                      <button 
-                        onClick={() => setExpandedRace(isExpanded ? null : location)}
-                        className={`flex items-center gap-2 px-4 py-2 border rounded-sm transition-all text-[10px] font-black uppercase tracking-widest ${
-                            isExpanded ? 'bg-f1-red text-white border-f1-red' : 'bg-bg-subtle text-text-muted border-border hover:border-f1-red hover:text-f1-red'
-                        }`}
-                      >
-                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                          {isExpanded ? 'Hide Results' : 'View Winner'}
-                      </button>
-                  )}
+                </div>
+                
+                {winner && (
+                  <button 
+                    onClick={() => setExpandedRace(isExpanded ? null : location)}
+                    className={`flex items-center gap-2 px-4 py-2 border transition-all duration-500 font-sans text-[10px] font-medium uppercase tracking-[0.2em] ${
+                      isExpanded ? 'bg-[#1A1A1A] text-[#F9F8F6] border-[#1A1A1A]' : 'bg-transparent text-[#6C6863] border-[#1A1A1A]/10 hover:border-[#D4AF37] hover:text-[#D4AF37]'
+                    }`}
+                  >
+                    {isExpanded ? <ChevronUp className="w-3 h-3" strokeWidth={1.5} /> : <ChevronDown className="w-3 h-3" strokeWidth={1.5} />}
+                    {isExpanded ? 'Hide' : 'Winner'}
+                  </button>
+                )}
               </div>
 
-              {/* Race Winner Spotlight Section - Expansion */}
+              {/* Winner Spotlight */}
               {isExpanded && winner && (
-                  <div className="mb-8 p-8 minimal-card bg-bg-subtle border-l-4 border-l-f1-red animate-slide-up flex flex-col md:flex-row items-center gap-12 group">
-                      <div className="flex-shrink-0 relative">
-                         <div className="w-32 h-32 lg:w-44 lg:h-44 rounded-full bg-white border border-border flex items-center justify-center text-text-muted overflow-hidden relative shadow-xl">
-                             {getDriverImage(winner.Driver.familyName) ? (
-                               <img 
-                                 src={getDriverImage(winner.Driver.familyName)!}
-                                 className="absolute top-0 h-[350%] w-auto max-w-none object-contain object-top mt-4"
-                                 alt={winner.Driver.familyName}
-                               />
-                             ) : (
-                               <UserCircle2 className="w-20 h-20 opacity-10" />
-                             )}
-                             <div className="absolute inset-0 bg-gradient-to-t from-f1-red/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                         </div>
-                         <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-f1-red text-white flex items-center justify-center font-black italic rounded-full border-4 border-bg-subtle">
-                             P1
-                         </div>
-                      </div>
-                      
-                      <div className="flex-1 text-center md:text-left">
-                          <div className="text-f1-red text-[10px] font-black uppercase tracking-[0.3em] mb-2 font-mono">Race Outcome Decoded</div>
-                          <h3 className="text-4xl font-black text-text-primary uppercase italic leading-none mb-2">
-                              {winner.Driver.givenName} <span className="text-f1-red">{winner.Driver.familyName}</span>
-                          </h3>
-                          <div className="flex flex-wrap justify-center md:justify-start gap-6">
-                              <div className="flex items-center gap-2">
-                                  <Trophy className="w-4 h-4 text-f1-yellow" />
-                                  <span className="text-xs font-black uppercase text-text-secondary italic">{winner.Constructor.name}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                  <Clock className="w-4 h-4 text-text-muted" />
-                                  <span className="text-xs font-bold text-text-muted uppercase tabular-nums">{winner.Time?.time || 'Finished'}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                  <div className="text-[10px] font-black text-f1-red">PTS</div>
-                                  <span className="text-sm font-black text-text-primary">+{winner.points}</span>
-                              </div>
-                          </div>
-                      </div>
-
-                      <div className="hidden lg:block opacity-5 group-hover:opacity-10 transition-opacity translate-x-12">
-                          <Trophy className="w-32 h-32 text-text-primary" />
-                      </div>
+                <div className="mb-10 p-8 md:p-12 border-t border-[#1A1A1A] border-l-2 border-l-[#D4AF37] flex flex-col md:flex-row items-center gap-12 group animate-fade-in">
+                  <div className="flex-shrink-0 relative">
+                    <div className="w-28 h-28 lg:w-36 lg:h-36 bg-[#EBE5DE] flex items-center justify-center overflow-hidden relative shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]">
+                      {getDriverImage(winner.Driver.familyName) ? (
+                        <img 
+                          src={getDriverImage(winner.Driver.familyName)!}
+                          className="absolute top-0 h-[350%] w-auto max-w-none object-contain object-top mt-4 grayscale group-hover:grayscale-0 transition-all duration-[1500ms]"
+                          alt={winner.Driver.familyName}
+                        />
+                      ) : (
+                        <span className="font-serif text-4xl text-[#1A1A1A]/10">P1</span>
+                      )}
+                    </div>
                   </div>
+                  
+                  <div className="flex-1 text-center md:text-left">
+                    <div className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#D4AF37] mb-3">Race Winner</div>
+                    <h3 className="font-serif text-3xl md:text-4xl text-[#1A1A1A] leading-tight mb-3">
+                      <span className="text-[#6C6863]">{winner.Driver.givenName}</span>{' '}
+                      {winner.Driver.familyName}
+                    </h3>
+                    <div className="flex flex-wrap justify-center md:justify-start gap-6">
+                      <div className="flex items-center gap-2">
+                        <Trophy className="w-3.5 h-3.5 text-[#D4AF37]" strokeWidth={1.5} />
+                        <span className="font-sans text-xs text-[#6C6863] uppercase tracking-[0.1em]">{winner.Constructor.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-3.5 h-3.5 text-[#6C6863]" strokeWidth={1.5} />
+                        <span className="font-sans text-xs text-[#6C6863] uppercase tabular-nums">{winner.Time?.time || 'Finished'}</span>
+                      </div>
+                      <div className="font-sans text-xs font-medium text-[#D4AF37] uppercase tracking-[0.1em]">
+                        +{winner.points} PTS
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0">
                 {raceSessions.map((session: Session) => {
                   const now = new Date()
                   const sessionDate = new Date(session.date_start)
@@ -202,56 +208,53 @@ export default function SchedulePage() {
                     <Link
                       key={session.session_key}
                       to={isPast ? `/results/${session.session_key}` : `/live/${session.session_key}`}
-                      className={`minimal-card p-4 sm:p-6 lg:p-8 group relative flex flex-col justify-between h-[220px] sm:h-[260px] lg:h-[280px] ${
-                          isPast ? 'opacity-50 grayscale hover:grayscale-0 transition-all' : ''
+                      className={`border-t border-[#1A1A1A]/10 p-6 md:p-8 group flex flex-col justify-between min-h-[240px] md:min-h-[280px] transition-all duration-700 hover:bg-[#1A1A1A]/[0.02] relative ${
+                        isPast ? 'opacity-40 hover:opacity-100' : ''
                       }`}
                     >
                       <div>
-                          <div className="flex items-start justify-between mb-6">
-                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-colors ${
-                                  isActive ? 'bg-f1-red text-white border-f1-red' : 'bg-bg-subtle text-text-muted border-border group-hover:border-f1-red group-hover:text-f1-red'
-                              }`}>
-                                  {sessionTypeIcon(session.session_type)}
-                              </div>
-                              
-                              {isActive ? (
-                                  <div className="flex items-center gap-2 px-3 py-1 bg-f1-red text-white text-[8px] font-black uppercase italic animate-pulse rounded-lg">
-                                      <div className="w-1 h-1 bg-white rounded-full" />
-                                      Live Transmission
-                                  </div>
-                              ) : isPast ? (
-                                  <div className="text-[8px] font-black uppercase text-text-muted tracking-wider">Completed</div>
-                              ) : null}
+                        <div className="flex items-start justify-between mb-6">
+                          <div className={`w-8 h-8 flex items-center justify-center border transition-colors duration-500 ${
+                            isActive ? 'bg-[#D4AF37] text-[#1A1A1A] border-[#D4AF37]' : 'bg-transparent text-[#6C6863] border-[#1A1A1A]/10 group-hover:border-[#D4AF37] group-hover:text-[#D4AF37]'
+                          }`}>
+                            {sessionTypeIcon(session.session_type)}
                           </div>
-
-                          <h3 className="text-xl font-black text-text-primary uppercase italic mb-2 leading-none group-hover:text-f1-red transition-colors">
-                              {session.session_name}
-                          </h3>
-                          <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-4">
-                              {session.session_type}
-                          </p>
                           
-                          <div className="text-xs font-medium text-text-secondary">
-                            {formatSessionDateTime(session.date_start, session.gmt_offset)}
-                          </div>
+                          {isActive && (
+                            <div className="font-sans text-[8px] font-medium uppercase tracking-[0.2em] text-[#D4AF37]">
+                              Live
+                            </div>
+                          )}
+                          {isPast && (
+                            <div className="font-sans text-[8px] font-medium uppercase tracking-[0.2em] text-[#6C6863]">Completed</div>
+                          )}
+                        </div>
+
+                        <h3 className="font-serif text-lg md:text-xl text-[#1A1A1A] mb-2 leading-tight group-hover:text-[#D4AF37] transition-colors duration-500">
+                          {session.session_name}
+                        </h3>
+                        <p className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#6C6863] mb-3">
+                          {session.session_type}
+                        </p>
+                        <div className="font-sans text-xs text-[#6C6863]">
+                          {formatSessionDateTime(session.date_start, session.gmt_offset)}
+                        </div>
                       </div>
 
-                      <div className="mt-8 pt-6 border-t border-border group-hover:border-f1-red/10">
-                          {isPast ? (
-                              <div className="flex items-center justify-between">
-                                 <div className="text-[10px] font-black uppercase text-text-muted">Results Sealed</div>
-                                 {winner && session.session_type.toLowerCase() === 'race' && (
-                                     <div className="text-[10px] font-black text-f1-red uppercase italic flex items-center gap-1">
-                                         Winner: {winner.Driver.code}
-                                     </div>
-                                 )}
-                              </div>
-                          ) : (
-                              <div className="flex items-center justify-between">
-                                  <Countdown dateStart={session.date_start} size="sm" />
-                                  {isActive && <ChevronRight className="w-4 h-4 text-f1-red animate-bounce-x" />}
-                              </div>
-                          )}
+                      <div className="mt-6 pt-5 border-t border-[#1A1A1A]/5 group-hover:border-[#D4AF37]/20 transition-colors duration-500">
+                        {isPast ? (
+                          <div className="flex items-center justify-between">
+                            <span className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#6C6863]">Results</span>
+                            {winner && session.session_type.toLowerCase() === 'race' && (
+                              <span className="font-sans text-[10px] font-medium text-[#D4AF37] uppercase">Winner: {winner.Driver.code}</span>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-between">
+                            <Countdown dateStart={session.date_start} size="sm" />
+                            {isActive && <ChevronRight className="w-4 h-4 text-[#D4AF37]" strokeWidth={1.5} />}
+                          </div>
+                        )}
                       </div>
                     </Link>
                   )
@@ -262,16 +265,6 @@ export default function SchedulePage() {
         })}
         </div>
       </div>
-      
-      <style>{`
-        @keyframes bounce-x {
-          0%, 100% { transform: translateX(0); }
-          50% { transform: translateX(4px); }
-        }
-        .animate-bounce-x { animation: bounce-x 1s infinite; }
-        .animate-slide-up { animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        @keyframes slide-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-      `}</style>
     </div>
   )
 }

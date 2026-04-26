@@ -1,11 +1,11 @@
 /**
- * AuthPage - F1 Premium Login Experience
+ * AuthPage - Luxury Editorial Sign-In
  * Firebase Auth: Email/Password + Google Sign-In
  */
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, Mail, ChevronRight, ArrowLeft, AlertCircle, Loader2 } from 'lucide-react';
+import { ChevronRight, ArrowLeft, AlertCircle, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
 /** Inline Google "G" logo SVG */
@@ -51,7 +51,6 @@ export default function AuthPage() {
   const handleGoogleSignIn = async () => {
     try {
       await loginWithGoogle();
-      // Only navigate if auth succeeded
       if (useAuthStore.getState().isAuthenticated) {
         navigate('/');
       }
@@ -66,205 +65,186 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#F9F8F6] flex flex-col lg:flex-row">
       {/* Left Decoration - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-bg-subtle relative items-center justify-center overflow-hidden border-r border-border">
-        <div className="absolute top-0 right-0 p-12 text-right">
-          <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-2">Protocol 77</div>
-          <div className="text-sm font-bold text-text-primary uppercase italic">Synchronized Feed</div>
+      <div className="hidden lg:flex lg:w-1/2 bg-[#1A1A1A] relative items-center justify-center overflow-hidden border-r border-[#1A1A1A]">
+        {/* Decorative corner text */}
+        <div className="absolute top-12 right-12 text-right">
+          <div className="font-sans text-[10px] font-medium text-[#F9F8F6]/30 uppercase tracking-[0.4em] mb-1">Vol. 01</div>
+          <div className="font-serif text-sm italic text-[#F9F8F6]/50">Editorial Access</div>
         </div>
 
-        <div className="relative z-10 p-12 max-w-lg">
-          <div className="flex items-center gap-3 mb-8">
-            <img src="/logo.png" alt="DammyLive" className="w-12 h-12 object-contain" />
-            <div className="flex flex-col -space-y-1">
-              <span className="text-3xl font-black italic tracking-tighter text-text-primary uppercase">
-                Dammy<span className="text-f1-red">Live</span>
+        <div className="relative z-10 p-16 max-w-lg">
+          <div className="flex items-center gap-3 mb-10">
+            <img src="/logo.png" alt="DammyLive" className="w-10 h-10 object-contain" />
+            <div className="flex flex-col">
+              <span className="font-serif text-2xl text-[#F9F8F6] tracking-tight leading-none">
+                Dammy<em className="text-[#D4AF37]">Live</em>
               </span>
-              <span className="text-[7px] font-black uppercase tracking-[0.4em] text-text-muted">Telemetry Hub // 2026</span>
+              <span className="font-sans text-[7px] font-medium uppercase tracking-[0.4em] text-[#F9F8F6]/40">
+                Editorial · 2026
+              </span>
             </div>
           </div>
 
-          <div className="w-16 h-1 bg-f1-red mb-8" />
-          <h1 className="text-5xl xl:text-6xl font-black text-text-primary uppercase italic leading-none tracking-tighter mb-6">
-            Redline <span className="text-f1-red">Access</span>
+          <div className="w-12 h-px bg-[#D4AF37] mb-10" />
+          <h1 className="font-serif text-5xl xl:text-6xl text-[#F9F8F6] leading-[0.9] tracking-tight mb-8">
+            Welcome <br />
+            <em className="text-[#D4AF37]">Home</em>
           </h1>
-          <p className="text-text-secondary text-base leading-relaxed uppercase font-medium tracking-wide">
-            Join the global telemetry network. Get real-time race data, personalized standings, and advanced archive access.
+          <p className="font-sans text-base text-[#F9F8F6]/50 leading-relaxed">
+            Sign in to access the full editorial experience — real-time telemetry, 
+            personalized standings, and curated insights.
           </p>
         </div>
 
-        <div className="absolute -bottom-16 -left-16 text-[20rem] font-black text-f1-red opacity-[0.03] italic select-none pointer-events-none">
-          DRIVE
+        {/* Large decorative serif text */}
+        <div className="absolute -bottom-16 -left-8 font-serif text-[20rem] text-[#F9F8F6]/[0.015] italic select-none pointer-events-none leading-none">
+          D
         </div>
       </div>
 
       {/* Right Content - Form */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 bg-white relative min-h-screen lg:min-h-0">
+      <div className="flex-1 flex flex-col items-center justify-center p-8 sm:p-12 bg-[#F9F8F6] relative min-h-screen lg:min-h-0">
         <button
           onClick={() => navigate('/')}
-          className="absolute top-4 left-4 sm:top-8 sm:left-8 flex items-center gap-2 text-[10px] font-black uppercase text-text-muted hover:text-f1-red transition-colors"
+          className="absolute top-8 left-8 flex items-center gap-2 font-sans text-[10px] font-medium uppercase text-[#6C6863] hover:text-[#D4AF37] transition-colors duration-500"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
+          <ArrowLeft className="w-4 h-4" strokeWidth={1.5} />
+          Home
         </button>
 
-        <div className="w-full max-w-md mt-12 sm:mt-0">
+        <div className="w-full max-w-md mt-16 sm:mt-0">
           {/* Mobile Logo */}
-          <div className="flex items-center gap-2 mb-8 lg:hidden">
+          <div className="flex items-center gap-2 mb-10 lg:hidden">
             <img src="/logo.png" alt="DammyLive" className="w-8 h-8 object-contain" />
-            <span className="text-xl font-black italic tracking-tighter text-text-primary uppercase">
-              Dammy<span className="text-f1-red">Live</span>
+            <span className="font-serif text-xl text-[#1A1A1A] tracking-tight">
+              Dammy<em className="text-[#D4AF37]">Live</em>
             </span>
           </div>
 
-          <div className="mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-f1-red text-white text-[10px] font-black uppercase tracking-widest mb-4 rounded-lg">
-              Security Portal
+          <div className="mb-10">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px w-8 bg-[#D4AF37]" />
+              <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
+                Authentication
+              </span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-text-primary uppercase italic leading-none tracking-tighter">
-              {isLogin ? 'Sign In' : 'Join the Race'}
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] leading-[0.9]">
+              {isLogin ? 'Sign In' : (<>Create <em className="text-[#D4AF37]">Account</em></>)}
             </h2>
-            <p className="text-text-muted text-xs uppercase font-bold tracking-widest mt-2">
-              Authorized Personnel Only
-            </p>
           </div>
 
-          {/* ── Error Message ── */}
+          {/* Error Message */}
           {error && (
-            <div className="mb-5 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl animate-shake">
-              <AlertCircle className="w-5 h-5 text-f1-red flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-bold text-f1-red">{error}</p>
-              </div>
-              <button
-                onClick={clearError}
-                className="ml-auto text-f1-red/50 hover:text-f1-red text-xs font-black"
-              >
-                ✕
-              </button>
+            <div className="mb-6 flex items-start gap-3 p-5 bg-[#8B0000]/5 border border-[#8B0000]/20">
+              <AlertCircle className="w-4 h-4 text-[#8B0000] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+              <p className="font-sans text-sm text-[#8B0000]">{error}</p>
+              <button onClick={clearError} className="ml-auto text-[#8B0000]/50 hover:text-[#8B0000] text-xs font-medium">✕</button>
             </div>
           )}
 
-          {/* ── Google Sign-In Button ── */}
+          {/* Google Sign-In */}
           <button
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 py-3.5 sm:py-4 px-6 bg-white border-2 border-border rounded-xl hover:border-text-primary hover:shadow-md transition-all duration-200 mb-6 group active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-[#F9F8F6] border border-[#1A1A1A]/10 hover:border-[#1A1A1A] transition-all duration-500 mb-8 group disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
-              <Loader2 className="w-5 h-5 animate-spin text-text-muted" />
+              <Loader2 className="w-5 h-5 animate-spin text-[#6C6863]" />
             ) : (
               <GoogleLogo className="w-5 h-5" />
             )}
-            <span className="text-sm font-bold text-text-primary tracking-tight">
-              Continue with Google
-            </span>
+            <span className="font-sans text-sm font-medium text-[#1A1A1A]">Continue with Google</span>
           </button>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 mb-6">
-            <div className="flex-1 h-px bg-border" />
-            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">Or continue with email</span>
-            <div className="flex-1 h-px bg-border" />
+          <div className="flex items-center gap-4 mb-8">
+            <div className="flex-1 h-px bg-[#1A1A1A]/10" />
+            <span className="font-sans text-[10px] font-medium text-[#6C6863] uppercase tracking-[0.2em]">Or with email</span>
+            <div className="flex-1 h-px bg-[#1A1A1A]/10" />
           </div>
 
-          <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {!isLogin && (
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Full Name</label>
-                <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-f1-red transition-colors pointer-events-none z-10" />
-                  <input
-                    type="text"
-                    placeholder="J. DOE"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-white border border-border py-3.5 sm:py-4 pr-4 pl-14 rounded-xl focus:outline-none focus:border-f1-red text-sm font-black uppercase italic tracking-wider transition-all"
-                    required={!isLogin}
-                  />
-                </div>
+                <label className="font-sans text-[10px] font-medium text-[#6C6863] uppercase tracking-[0.25em]">Full Name</label>
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-transparent border-b border-[#1A1A1A]/20 py-3 focus:border-[#D4AF37] text-sm font-sans text-[#1A1A1A] placeholder:text-[#6C6863]/50 placeholder:font-serif placeholder:italic transition-colors duration-500 outline-none"
+                  required={!isLogin}
+                />
               </div>
             )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Email Address</label>
-              <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-f1-red transition-colors pointer-events-none z-10" />
-                <input
-                  type="email"
-                  placeholder="EMAIL@EXAMPLE.COM"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white border border-border py-3.5 sm:py-4 pr-4 pl-14 rounded-xl focus:outline-none focus:border-f1-red text-sm font-black uppercase italic tracking-wider transition-all"
-                  required
-                />
-              </div>
+              <label className="font-sans text-[10px] font-medium text-[#6C6863] uppercase tracking-[0.25em]">Email</label>
+              <input
+                type="email"
+                placeholder="email@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-transparent border-b border-[#1A1A1A]/20 py-3 focus:border-[#D4AF37] text-sm font-sans text-[#1A1A1A] placeholder:text-[#6C6863]/50 placeholder:font-serif placeholder:italic transition-colors duration-500 outline-none"
+                required
+              />
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Password</label>
-              <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted group-focus-within:text-f1-red transition-colors pointer-events-none z-10" />
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-white border border-border py-3.5 sm:py-4 pr-4 pl-14 rounded-xl focus:outline-none focus:border-f1-red text-sm font-black transition-all"
-                  required
-                  minLength={6}
-                />
-              </div>
+              <label className="font-sans text-[10px] font-medium text-[#6C6863] uppercase tracking-[0.25em]">Password</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-transparent border-b border-[#1A1A1A]/20 py-3 focus:border-[#D4AF37] text-sm font-sans text-[#1A1A1A] placeholder:text-[#6C6863]/50 transition-colors duration-500 outline-none"
+                required
+                minLength={6}
+              />
               {!isLogin && (
-                <p className="text-[9px] font-bold text-text-muted uppercase tracking-wider ml-1">Minimum 6 characters</p>
+                <p className="font-sans text-[9px] text-[#6C6863] uppercase tracking-[0.2em]">Minimum 6 characters</p>
               )}
             </div>
 
             {isLogin && (
               <div className="flex justify-end">
-                <button type="button" className="text-[10px] font-black text-f1-red uppercase tracking-widest hover:underline">Lost Signal?</button>
+                <button type="button" className="font-sans text-[10px] font-medium text-[#D4AF37] uppercase tracking-[0.2em] hover:text-[#1A1A1A] transition-colors duration-500">
+                  Forgot Password?
+                </button>
               </div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-4 sm:py-5 flex items-center justify-center gap-3 transition-transform active:scale-95 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full py-5 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <>
-                  {isLogin ? 'Establish Connection' : 'Register ID'}
-                  <ChevronRight className="w-4 h-4" />
-                </>
+                <span className="flex items-center gap-2">
+                  {isLogin ? 'Sign In' : 'Create Account'}
+                  <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
+                </span>
               )}
             </button>
           </form>
 
-          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
-            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
-              {isLogin ? "No Access ID yet?" : "Already Authorized?"}
+          <div className="mt-10 pt-10 border-t border-[#1A1A1A]/10 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <span className="font-sans text-[10px] font-medium text-[#6C6863] uppercase tracking-[0.2em]">
+              {isLogin ? "No account?" : "Already have one?"}
             </span>
             <button
               onClick={switchMode}
-              className="text-[10px] font-black text-f1-red uppercase tracking-widest hover:underline"
+              className="font-sans text-[10px] font-medium text-[#D4AF37] uppercase tracking-[0.2em] hover:text-[#1A1A1A] transition-colors duration-500"
             >
-              {isLogin ? 'Join Network' : 'Sign In'}
+              {isLogin ? 'Create Account' : 'Sign In'}
             </button>
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-          20%, 40%, 60%, 80% { transform: translateX(4px); }
-        }
-        .animate-shake { animation: shake 0.5s ease-in-out; }
-      `}</style>
     </div>
   );
 }

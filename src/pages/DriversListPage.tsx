@@ -1,16 +1,14 @@
 /**
- * DriversListPage - All current F1 drivers roster
- * Premium "Reference Style" Design: Half-body images with team color backgrounds
- * Matches Step 449 reference image exactly.
+ * DriversListPage — All current F1 drivers
+ * Luxury Editorial Edition — Grayscale portraits with team color accents
  */
 
 import { useQuery } from '@tanstack/react-query'
 import { getSessions, getDrivers } from '@/api/openf1'
 import { Link } from 'react-router-dom'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
-import { ShieldCheck } from 'lucide-react'
 import { Driver } from '@/types/f1'
-import { getDriverImage } from '@/lib/imageMap'
+import { getDriverImage, getTeamLogo } from '@/lib/imageMap'
 
 export default function DriversListPage() {
   const currentYear = new Date().getFullYear()
@@ -38,141 +36,105 @@ export default function DriversListPage() {
   }, []).sort((a, b) => a.driver_number - b.driver_number)
 
   return (
-    <div className="min-h-screen bg-[#F8F7F3] text-text-primary">
-      <div className="container px-4 sm:px-md py-8 sm:py-12 lg:py-xl">
-        {/* Header section — simple as in the ref theme */}
-        <div className="mb-12 border-b border-black/5 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-f1-red text-white text-[10px] font-black uppercase tracking-widest mb-4 rounded-md">
-              <ShieldCheck className="w-3 h-3" />
+    <div className="min-h-screen bg-[#F9F8F6]">
+      <div className="max-w-[1600px] mx-auto px-8 md:px-16 py-12 md:py-20 lg:py-32">
+        {/* Header */}
+        <div className="mb-16 md:mb-24 border-b border-[#1A1A1A]/10 pb-10">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="h-px w-8 md:w-12 bg-[#D4AF37]" />
+            <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
               2026 Season
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tighter uppercase italic leading-none">
-              Competitor <span className="text-f1-red">Roster</span>
-            </h1>
+            </span>
           </div>
-          <div className="text-left md:text-right">
-            <div className="text-sm font-black uppercase italic">{uniqueDrivers.length} Profiles Loaded</div>
-          </div>
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl text-[#1A1A1A] leading-[0.9] tracking-tight">
+            <em className="text-[#D4AF37]">Drivers</em>
+          </h1>
         </div>
 
         {/* Content */}
         {isLoading || !latestSessionKey ? (
           <div className="flex flex-col items-center justify-center py-32 gap-4">
             <LoadingSpinner />
-            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] animate-pulse">Establishing Bio-Link...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
             {uniqueDrivers.map((driver, idx) => (
-              <DriverReferenceCard key={driver.driver_number} driver={driver} idx={idx} />
+              <DriverEditorialCard key={driver.driver_number} driver={driver} idx={idx} />
             ))}
           </div>
         )}
       </div>
-
-      <style>{`
-        .animate-card-in { 
-          animation: card-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-          animation-delay: var(--delay);
-        }
-        @keyframes card-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   )
 }
 
 /**
- * ─── DriverReferenceCard ───
- * CLONE of Step 449 reference image.
- * Horizontal orientation, half-body zoomed image, left-aligned text.
+ * DriverEditorialCard — Grayscale portrait, color on hover, team accent line
  */
-function DriverReferenceCard({ driver, idx }: { driver: Driver; idx: number }) {
-  const teamColor = driver.team_colour ? `#${driver.team_colour}` : '#ff1801'
+function DriverEditorialCard({ driver, idx }: { driver: Driver; idx: number }) {
+  const teamColor = driver.team_colour ? `#${driver.team_colour}` : '#1A1A1A'
   const localImage = getDriverImage(driver.last_name)
   const toDriverId = (d: Driver) => `${d.first_name}_${d.last_name}`.toLowerCase().replace(/ /g, '_')
 
   return (
     <Link
       to={`/driver/${toDriverId(driver)}`}
-      className="group relative flex h-[220px] sm:h-[260px] rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 animate-card-in border border-black/5"
-      style={{ '--delay': `${Math.min(idx, 10) * 80}ms` } as any}
+      className="group border-t border-[#1A1A1A]/10 relative overflow-hidden"
+      style={{ animationDelay: `${Math.min(idx, 10) * 60}ms` }}
     >
-      {/* ── Background: Team Gradient ── */}
-      <div 
-        className="absolute inset-0 transition-all duration-700 group-hover:scale-105"
-        style={{ 
-          background: `linear-gradient(135deg, ${teamColor} 0%, ${teamColor}dd 100%)` 
-        }}
-      />
-
-      {/* Halftone Dot Pattern (like the ref) */}
-      <div
-        className="absolute inset-0 opacity-[0.15] pointer-events-none"
-        style={{ 
-          backgroundImage: `radial-gradient(circle, #000 1px, transparent 1px)`, 
-          backgroundSize: '8px 8px' 
-        }}
-      />
-
-      {/* ── Content Layout ── */}
-      <div className="relative z-10 w-full h-full flex flex-row">
-        
-        {/* Left Column: Stats & Name (Reference style) */}
-        <div className="w-[60%] sm:w-[55%] p-6 sm:p-8 flex flex-col justify-between text-white">
-          <div className="flex flex-col gap-0">
-             <span className="text-base sm:text-xl font-bold uppercase tracking-tight leading-none h-fit">
-               {driver.first_name}
-             </span>
-             <h2 className="text-2xl sm:text-4xl font-black uppercase italic tracking-tighter leading-none mb-1">
-               {driver.last_name}
-             </h2>
-             <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest opacity-80 mb-4">
-               {driver.team_name}
-             </span>
-             
-             {/* Driver Number — Large but clean as in ref */}
-             <div className="text-4xl sm:text-5xl font-black italic opacity-30 tracking-tighter leading-none">
-               {driver.driver_number}
-             </div>
+      {/* Image area — portrait aspect ratio, grayscale → color */}
+      <div className="aspect-[3/4] relative overflow-hidden bg-[#EBE5DE]">
+        {localImage ? (
+          <img
+            src={localImage}
+            alt={driver.full_name}
+            className="absolute top-0 left-1/2 -translate-x-1/2 h-[180%] w-auto max-w-none object-contain object-top grayscale group-hover:grayscale-0 transition-all duration-[2000ms] group-hover:scale-105"
+          />
+        ) : driver.headshot_url ? (
+          <img 
+            src={driver.headshot_url}
+            alt={driver.full_name}
+            className="absolute inset-0 w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-[2000ms] opacity-60 group-hover:opacity-100"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="font-serif text-8xl text-[#1A1A1A]/5">{driver.driver_number}</span>
           </div>
+        )}
 
-          {/* Bottom Flag — Circular as in Step 449 ref */}
-          <div className="mt-auto">
-             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-white/20 shadow-lg">
-                <img 
-                  src={`https://purecatamphetamine.github.io/country-flag-icons/1x1/${driver.country_code}.svg`}
-                  className="w-full h-full object-cover"
-                  alt={driver.country_code}
-                  onError={(e) => (e.currentTarget.parentElement!.style.display = 'none')}
-                />
-             </div>
-          </div>
-        </div>
+        {/* Shadow overlay for depth */}
+        <div className="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]" />
 
-        {/* Right Column: Driver Image (ZOOMED to waist UP) */}
-        <div className="relative w-[40%] sm:w-[45%] flex items-start justify-center">
-          {localImage ? (
-            <img
-              src={localImage}
-              alt={driver.full_name}
-              className="absolute top-0 h-[220%] w-auto max-w-none object-contain object-top drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all duration-700 group-hover:scale-105 origin-top"
-            />
-          ) : (
-             <img 
-               src={driver.headshot_url || ''}
-               alt={driver.full_name}
-               className="h-[120%] w-auto object-contain object-top grayscale group-hover:grayscale-0 opacity-50"
-             />
-          )}
+        {/* Team color accent bar at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ backgroundColor: teamColor }} />
+
+        {/* Vertical text label — Signature editorial element */}
+        <div
+          className="hidden md:block absolute left-4 bottom-4 font-sans text-[8px] font-medium uppercase tracking-[0.3em] text-[#1A1A1A]/20 group-hover:text-[#1A1A1A]/40 transition-colors duration-700"
+          style={{ writingMode: 'vertical-rl' }}
+        >
+          {driver.team_name}
         </div>
       </div>
 
-      {/* Decorative side accent */}
-      <div className="absolute top-0 right-0 w-2 h-full bg-white/10" />
+      {/* Info */}
+      <div className="p-6 md:p-8">
+        <div className="font-sans text-[10px] font-medium uppercase tracking-[0.25em] text-[#6C6863] mb-2">
+          #{driver.driver_number} · {driver.country_code}
+        </div>
+        <h2 className="font-serif text-xl md:text-2xl text-[#1A1A1A] leading-tight group-hover:text-[#D4AF37] transition-colors duration-500">
+          <span className="text-[#6C6863]">{driver.first_name}</span>{' '}
+          {driver.last_name}
+        </h2>
+        <div className="font-sans text-xs text-[#6C6863] mt-2 flex items-center gap-2">
+          {getTeamLogo(driver.team_name) ? (
+            <img src={getTeamLogo(driver.team_name)!} alt={driver.team_name} className="w-4 h-4 object-contain brightness-0" />
+          ) : (
+            <div className="w-3 h-0.5" style={{ backgroundColor: teamColor }} />
+          )}
+          {driver.team_name}
+        </div>
+      </div>
     </Link>
   )
 }
