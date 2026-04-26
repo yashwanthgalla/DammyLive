@@ -99,7 +99,7 @@ export const Footer7 = ({
   },
   sections = defaultSections,
   description = "A curated editorial platform for the 2026 Formula 1 Season. Precision data and considered insights.",
-  copyright = "© 2026 DammyLive Editorial. All rights reserved.",
+  copyright = "© 2026 DammyLive.All rights reserved.",
   legalLinks = defaultLegalLinks,
 }: Footer7Props) => {
   return (
