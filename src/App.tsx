@@ -27,6 +27,7 @@ const ConstructorPage = lazy(() => import('./pages/ConstructorPage'))
 const DriversListPage = lazy(() => import('./pages/DriversListPage'))
 const TermsPage = lazy(() => import('./pages/TermsPage'))
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 /**
  * Page Loader Component — Editorial
@@ -117,19 +118,7 @@ export default function App() {
                 <Route path="/drivers" element={<DriversListPage />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
-                <Route
-                  path="*"
-                  element={
-                    <div className="px-8 md:px-16 py-32 max-w-[1600px] mx-auto">
-                      <h1 className="font-serif text-5xl md:text-7xl text-[#1A1A1A] leading-[0.9] mb-6">
-                        Page <em className="text-[#D4AF37]">Not Found</em>
-                      </h1>
-                      <p className="text-[#6C6863] font-sans text-lg leading-relaxed max-w-md">
-                        The page you're looking for doesn't exist. Return to the editorial.
-                      </p>
-                    </div>
-                  }
-                />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </ErrorBoundary>
