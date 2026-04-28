@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mail, MessageSquare, User, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Mail, User, AlertCircle, Trophy } from 'lucide-react';
 import { useForm, ValidationError } from '@formspree/react';
 
 export default function ContactPage() {
@@ -18,7 +18,7 @@ export default function ContactPage() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <div className="flex items-center gap-4 mb-8">
-              <MessageSquare className="w-5 h-5 text-[#1A1A1A]" strokeWidth={1.5} />
+              <Mail className="w-5 h-5 text-[#1A1A1A]" strokeWidth={1.5} />
               <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
                 Pit Wall
               </span>
@@ -60,7 +60,7 @@ export default function ContactPage() {
                 className="flex flex-col items-center justify-center text-center py-20"
               >
                 <div className="w-16 h-16 rounded-full bg-[#F9F8F6] flex items-center justify-center mb-6">
-                  <CheckCircle2 className="w-8 h-8 text-[#D4AF37]" strokeWidth={1.5} />
+                  <Trophy className="w-8 h-8 text-[#D4AF37]" strokeWidth={1.5} />
                 </div>
                 <h3 className="font-serif text-3xl text-[#1A1A1A] mb-4">Message Received</h3>
                 <p className="font-sans text-sm text-[#6C6863] max-w-xs leading-relaxed mb-8">
