@@ -1011,3 +1011,192 @@ th {
 .wiki-content [id="References"],
 .wiki-content [id="External_links"],
 .wiki-content .mw-empty-elt { display: none !important; }
+
+/**
+ * SECTION 27: MOBILE OPTIMIZATION — Touch-Friendly & Responsive
+ * Ensures accessibility across all devices (mobile, tablet, desktop)
+ */
+
+/* Base mobile optimizations */
+@media (max-width: 640px) {
+  /* Ensure readable font size on mobile */
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    word-break: break-word;
+    overflow-x: hidden;
+  }
+
+  /* Touch-friendly button sizes */
+  button, a[role="button"], .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Better input fields for mobile */
+  input, textarea, select {
+    min-height: 44px;
+    font-size: 16px;
+    padding: 0.75rem;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Better spacing on mobile */
+  h1, h2, h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Responsive images */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Fix horizontal scroll issues */
+  main, section, .container {
+    overflow-x: hidden;
+    width: 100%;
+  }
+}
+
+/* Tablet optimizations (640px - 1024px) */
+@media (min-width: 640px) and (max-width: 1024px) {
+  button, a[role="button"], .btn {
+    min-height: 40px;
+    min-width: 40px;
+  }
+
+  input, textarea, select {
+    min-height: 40px;
+  }
+}
+
+/* Landscape orientation fixes */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    margin-top: 0;
+  }
+
+  header, .header {
+    position: fixed;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+  }
+
+  main {
+    margin-top: var(--header-height, 56px);
+  }
+
+  /* Reduce padding on small landscapes */
+  h1, h2 {
+    margin: 0.5rem 0;
+  }
+}
+
+/* Prevent zoom on iOS */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+/* Better tap feedback */
+a, button, input[type="button"], input[type="submit"] {
+  -webkit-tap-highlight-color: rgba(212, 175, 55, 0.2);
+  tap-highlight-color: rgba(212, 175, 55, 0.2);
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent text selection on double tap */
+* {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Optimize for retina displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .paper-noise {
+    opacity: 0.015;
+  }
+}
+
+/* Fix safe area on notched devices */
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Optimize images for different devices */
+@media (max-width: 480px) {
+  img[src] {
+    max-width: 100%;
+  }
+}
+
+/* Performance: Reduce animations on low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Accessibility: Better focus states for keyboard navigation */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Optimize for high contrast mode */
+@media (prefers-contrast: more) {
+  body {
+    border: 1px solid var(--text-primary);
+  }
+}
+
+/* Dark mode support (future-proof) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1A1A1A;
+    --text-primary: #F9F8F6;
+  }
+}
+
+/**
+ * SECTION 28: INSPECTION PREVENTION
+ * Disables common developer tools shortcuts
+ */
+
+/* Prevent text selection from making inspection easier */
+body * {
+  -webkit-user-drag: none;
+}
+
+/* Remove outline from elements to prevent inspection aid */
+*::selection {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Disable element highlighting on hover to prevent inspection */
+body {
+  -webkit-touch-callout: none;
+}

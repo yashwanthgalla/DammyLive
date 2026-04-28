@@ -5,10 +5,16 @@ import { trackImageMap } from '../../lib/imageMap'
 const tracks = [
   { id: 'monaco', name: 'Monaco', img: trackImageMap['monaco'] },
   { id: 'spa', name: 'Spa-Francorchamps', img: trackImageMap['spa'] },
+  { id: 'silverstone', name: 'Silverstone', img: trackImageMap['silverstone'] },
+  { id: 'monza', name: 'Monza', img: trackImageMap['monza'] },
+  { id: 'suzuka', name: 'Suzuka', img: trackImageMap['suzuka'] },
+  { id: 'interlagos', name: 'Interlagos', img: trackImageMap['interlagos'] },
   { id: 'miami', name: 'Miami', img: trackImageMap['miami'] },
   { id: 'americas', name: 'Austin', img: trackImageMap['americas'] },
-  { id: 'catalunya', name: 'Barcelona', img: trackImageMap['catalunya'] },
+  { id: 'catalana', name: 'Barcelona', img: trackImageMap['catalunya'] },
   { id: 'villeneuve', name: 'Montreal', img: trackImageMap['villeneuve'] },
+  { id: 'hungaroring', name: 'Budapest', img: trackImageMap['hungaroring'] },
+  { id: 'zandvoort', name: 'Zandvoort', img: trackImageMap['zandvoort'] },
 ]
 
 // Duplicate tracks for infinite scroll effect

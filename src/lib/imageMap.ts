@@ -112,11 +112,24 @@ export const trackBlueprintMap: Record<string, string> = {
 // ── Track Images (photos) ──
 // Maps circuit ID → track photo in /public/trackimage/
 export const trackImageMap: Record<string, string> = {
+  'yas_marina': '/trackimage/abudhabi.png',
+  'baku': '/trackimage/azerbaijan.png',
   'catalunya': '/trackimage/barcelona.png',
   'spa': '/trackimage/belgium.png',
+  'interlagos': '/trackimage/brazil.png',
   'villeneuve': '/trackimage/canada.png',
+  'shanghai': '/trackimage/china.png',
+  'silverstone': '/trackimage/greatbritain.png',
+  'hungaroring': '/trackimage/hungarian.png',
+  'monza': '/trackimage/italy.png',
+  'suzuka': '/trackimage/japan.png',
+  'las_vegas': '/trackimage/lasvegas.png',
   'miami': '/trackimage/maimi2026.png',
+  'rodriguez': '/trackimage/mexico.png',
   'monaco': '/trackimage/monoco.png',
+  'zandvoort': '/trackimage/netherlands.png',
+  'losail': '/trackimage/qatar.png',
+  'marina_bay': '/trackimage/singapore.png',
   'americas': '/trackimage/unitedstates.png',
 }
 

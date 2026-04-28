@@ -5,7 +5,7 @@
  */
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import ErrorBoundary from './components/shared/ErrorBoundary'
@@ -40,6 +40,52 @@ function PageLoader() {
  * Includes paper noise texture and visible grid lines for editorial feel
  */
 export default function App() {
+  // Disable right-click context menu and developer tools shortcuts
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // F12 - Developer Tools
+      if (e.key === 'F12') {
+        e.preventDefault()
+      }
+      // Ctrl+Shift+I - Inspect Element (Windows/Linux)
+      if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault()
+      }
+      // Ctrl+Shift+J - Console (Windows/Linux)
+      if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+        e.preventDefault()
+      }
+      // Ctrl+Shift+C - Inspect Element (Chrome)
+      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault()
+      }
+      // Cmd+Option+I - Inspect Element (Mac)
+      if (e.metaKey && e.altKey && e.key === 'i') {
+        e.preventDefault()
+      }
+      // Cmd+Option+J - Console (Mac)
+      if (e.metaKey && e.altKey && e.key === 'j') {
+        e.preventDefault()
+      }
+      // Cmd+Option+U - View Source (Mac)
+      if (e.metaKey && e.altKey && e.key === 'u') {
+        e.preventDefault()
+      }
+    }
+
+    document.addEventListener('contextmenu', handleContextMenu)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
   return (
     <Router>
       <ScrollToTop />
