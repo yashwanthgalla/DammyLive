@@ -3,6 +3,8 @@
  * Luxury Editorial Edition
  */
 
+import { Link } from 'react-router-dom'
+
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-[#F9F8F6]">
@@ -130,7 +132,7 @@ export default function PrivacyPage() {
           <section className="mt-16 pt-12 border-t border-[#1A1A1A]/10">
             <h2 className="font-serif text-2xl text-[#1A1A1A] mb-4">Contact Us</h2>
             <p className="text-sm leading-relaxed text-[#6C6863]">
-              If you have any questions about this Privacy Policy, please contact us through our website contact form or by visiting our website.
+              If you have any questions about this Privacy Policy, please <Link to="/contact" className="text-[#D4AF37] hover:text-[#1A1A1A] transition-colors duration-300">contact us</Link> through our editorial pit wall.
             </p>
           </section>
         </div>

@@ -28,6 +28,7 @@ const DriversListPage = lazy(() => import('./pages/DriversListPage'))
 const TermsPage = lazy(() => import('./pages/TermsPage'))
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
 
 /**
  * Page Loader Component — Editorial
@@ -118,6 +119,7 @@ export default function App() {
                 <Route path="/drivers" element={<DriversListPage />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/contact" element={<ContactPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>

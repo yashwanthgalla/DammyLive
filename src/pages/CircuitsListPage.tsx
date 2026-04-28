@@ -71,6 +71,7 @@ export default function CircuitsListPage() {
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
             <div>
               <div className="flex items-center gap-4 mb-6">
+                <img src="/F1.svg.png" alt="F1 Logo" className="h-3.5 md:h-4 object-contain" />
                 <div className="h-px w-8 md:w-12 bg-[#D4AF37]" />
                 <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
                   {viewFilter === 'current' ? 'Current Season' : 'Archive · 1950 → Present'}

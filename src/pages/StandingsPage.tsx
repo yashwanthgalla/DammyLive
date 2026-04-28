@@ -73,6 +73,7 @@ export default function StandingsPage() {
         <div className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#1A1A1A]/10 pb-10">
           <div>
             <div className="flex items-center gap-4 mb-6">
+              <img src="/F1.svg.png" alt="F1 Logo" className="h-3.5 md:h-4 object-contain" />
               <div className="h-px w-8 md:w-12 bg-[#D4AF37]" />
               <span className="font-sans text-[10px] font-medium uppercase tracking-[0.3em] text-[#6C6863]">
                 World Championship

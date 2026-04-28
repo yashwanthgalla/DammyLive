@@ -83,6 +83,7 @@ const defaultSections = [
 const defaultLegalLinks = [
   { name: "Terms", href: "/terms" },
   { name: "Privacy", href: "/privacy" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export const Footer7 = ({

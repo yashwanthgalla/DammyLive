@@ -3,6 +3,8 @@
  * Luxury Editorial Edition
  */
 
+import { Link } from 'react-router-dom'
+
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#F9F8F6]">
@@ -100,7 +102,7 @@ export default function TermsPage() {
           <section className="mt-16 pt-12 border-t border-[#1A1A1A]/10">
             <h2 className="font-serif text-2xl text-[#1A1A1A] mb-4">Questions?</h2>
             <p className="text-sm leading-relaxed text-[#6C6863]">
-              If you have any questions about these Terms of Service, please contact us through our website contact form.
+              If you have any questions about these Terms of Service, please <Link to="/contact" className="text-[#D4AF37] hover:text-[#1A1A1A] transition-colors duration-300">contact us</Link> through our editorial pit wall.
             </p>
           </section>
         </div>
