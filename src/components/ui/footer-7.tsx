@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import { RacingLine } from "../shared/RacingLine";
 
 interface Footer7Props {
   logo?: {
@@ -103,59 +104,67 @@ export const Footer7 = ({
   legalLinks = defaultLegalLinks,
 }: Footer7Props) => {
   return (
-    <section className="py-20 md:py-32 border-t border-[#1A1A1A]/10 bg-[#F9F8F6]">
-      <div className="max-w-[1600px] mx-auto px-8 md:px-16">
-        <div className="flex w-full flex-col justify-between gap-16 lg:flex-row lg:items-start">
-          {/* Brand Column */}
-          <div className="flex w-full flex-col justify-between gap-8 lg:items-start lg:max-w-sm">
-            <a href={logo.url}>
-              {logo.component}
-            </a>
-            <p className="font-sans text-sm text-[#6C6863] leading-relaxed max-w-xs">
-              {description}
-            </p>
-            {/* Decorative line */}
-            <div className="h-px w-12 bg-[#D4AF37]" />
-          </div>
-
-          {/* Navigation Columns */}
-          <div className="grid w-full grid-cols-2 sm:grid-cols-3 gap-12 lg:gap-20">
-            {sections.map((section, sectionIdx) => (
-              <div key={sectionIdx}>
-                <h3 className="font-serif text-base text-[#1A1A1A] mb-6 pb-3 border-b border-[#1A1A1A]/10">
-                  {section.title}
-                </h3>
-                <ul className="space-y-3">
-                  {section.links.map((link, linkIdx) => (
-                    <li key={linkIdx}>
-                      <a
-                        href={link.href}
-                        target={link.href.startsWith('http') ? '_blank' : undefined}
-                        rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="font-sans text-xs font-medium text-[#6C6863] hover:text-[#D4AF37] transition-colors duration-500 uppercase tracking-[0.15em]"
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="mt-20 flex flex-col justify-between gap-4 border-t border-[#1A1A1A]/10 pt-10 font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#6C6863] md:flex-row md:items-center">
-          <p className="order-2 lg:order-1">{copyright}</p>
-          <ul className="order-1 flex flex-col gap-4 md:order-2 md:flex-row md:gap-8">
-            {legalLinks.map((link, idx) => (
-              <li key={idx} className="hover:text-[#D4AF37] transition-colors duration-500">
-                <a href={link.href}>{link.name}</a>
-              </li>
-            ))}
-          </ul>
+    <>
+      <div className="mt-12 md:mt-24 w-full bg-[#F9F8F6] pt-10">
+        <div className="max-w-[1600px] mx-auto px-8 md:px-16 flex items-center">
+          <img src="/F1.svg.png" alt="F1 Logo" className="h-5 md:h-7 lg:h-8 shrink-0 mr-4 md:mr-6 object-contain" />
+          <RacingLine className="flex-grow" />
         </div>
       </div>
-    </section>
+      <section className="py-20 md:py-32 bg-[#F9F8F6]">
+        <div className="max-w-[1600px] mx-auto px-8 md:px-16">
+          <div className="flex w-full flex-col justify-between gap-16 lg:flex-row lg:items-start">
+            {/* Brand Column */}
+            <div className="flex w-full flex-col justify-between gap-8 lg:items-start lg:max-w-sm">
+              <a href={logo.url}>
+                {logo.component}
+              </a>
+              <p className="font-sans text-sm text-[#6C6863] leading-relaxed max-w-xs">
+                {description}
+              </p>
+              {/* Decorative line */}
+              <div className="h-px w-12 bg-[#D4AF37]" />
+            </div>
+
+            {/* Navigation Columns */}
+            <div className="grid w-full grid-cols-2 sm:grid-cols-3 gap-12 lg:gap-20">
+              {sections.map((section, sectionIdx) => (
+                <div key={sectionIdx}>
+                  <h3 className="font-serif text-base text-[#1A1A1A] mb-6 pb-3 border-b border-[#1A1A1A]/10">
+                    {section.title}
+                  </h3>
+                  <ul className="space-y-3">
+                    {section.links.map((link, linkIdx) => (
+                      <li key={linkIdx}>
+                        <a
+                          href={link.href}
+                          target={link.href.startsWith('http') ? '_blank' : undefined}
+                          rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          className="font-sans text-xs font-medium text-[#6C6863] hover:text-[#D4AF37] transition-colors duration-500 uppercase tracking-[0.15em]"
+                        >
+                          {link.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="mt-20 flex flex-col justify-between gap-4 border-t border-[#1A1A1A]/10 pt-10 font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-[#6C6863] md:flex-row md:items-center">
+            <p className="order-2 lg:order-1">{copyright}</p>
+            <ul className="order-1 flex flex-col gap-4 md:order-2 md:flex-row md:gap-8">
+              {legalLinks.map((link, idx) => (
+                <li key={idx} className="hover:text-[#D4AF37] transition-colors duration-500">
+                  <a href={link.href}>{link.name}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
